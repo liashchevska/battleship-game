@@ -48,7 +48,7 @@ $players: "you", "opponent";
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    position: relative;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -113,11 +113,14 @@ $orientations: "HR", "VR";
             z-index: 2;
             position: absolute;
 
-            $lw: if($orientation== "HR", $length, 1);
-            $lh: if($orientation== "VR", $length, 1);
+            top: 0;
+            left: 0;
 
-            width: $cell-size * $lw + $cell-border * $lw -1;
-            height: $cell-size * $lh + $cell-border * $lh -1;
+            $lw: if($orientation == "HR", $length, 1);
+            $lh: if($orientation == "VR", $length, 1);
+
+            width: ($cell-size * $lw) + ($cell-border * ($lw - 1));
+            height: ($cell-size * $lh) + ($cell-border * ($lh - 1));
 
             border-radius: 2px;
 
