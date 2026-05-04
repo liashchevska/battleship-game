@@ -1,3 +1,4 @@
+@use "sass:map";
 @import "_color-palette";
 
 @mixin themify($themes: $themes) {
@@ -5,8 +6,8 @@
         .theme-#{$theme} & {
             $theme-map: () !global;
             @each $key, $submap in $map {
-                $value: map-get(map-get($themes, $theme), "#{$key}");
-                $theme-map: map-merge(
+                $value: map.get(map.get($themes, $theme), "#{$key}");
+                $theme-map: map.merge(
                     $theme-map,
                     (
                         $key: $value,
@@ -20,5 +21,5 @@
     }
 }
 @function theme-based($key) {
-    @return map-get($theme-map, $key);
+    @return map.get($theme-map, $key);
 }
