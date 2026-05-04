@@ -20,7 +20,7 @@
     }
     box-sizing: border-box;
     width: $board-size * 1.5;
-    height: $board-size / 2;
+    height: $board-size * 0.5;
     position: relative;
     top: 30%;
     left: 50%;

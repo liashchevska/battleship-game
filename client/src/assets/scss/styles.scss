@@ -80,7 +80,7 @@ body {
     }
 }
 .opponent-select > .button-1 {
-    width: $button-width / 2;
+    width: $button-width * 0.5;
 }
 .opponent-select button:not(:last-child) {
     border-right: none; /* Prevent double borders */
