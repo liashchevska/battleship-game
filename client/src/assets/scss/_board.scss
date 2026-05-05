@@ -116,8 +116,8 @@ $orientations: "HR", "VR";
             top: 0;
             left: 0;
 
-            $lw: if($orientation == "HR", $length, 1);
-            $lh: if($orientation == "VR", $length, 1);
+            $lw: if(sass($orientation == "HR"): $length; else: 1);
+            $lh: if(sass($orientation == "VR"): $length; else: 1);
 
             width: ($cell-size * $lw) + ($cell-border * ($lw - 1));
             height: ($cell-size * $lh) + ($cell-border * ($lh - 1));
