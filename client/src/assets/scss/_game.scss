@@ -1,3 +1,5 @@
+@use './mixins' as *;
+
 .status {
     text-decoration: underline;
     text-underline-position: under;
@@ -7,36 +9,45 @@
 
 .status-waiting {
     @extend .status;
-    @include themify {
-        color: theme-based("main-color");
-        text-decoration-color: theme-based("main-color");
+
+    @include themify using ($theme-map) {
+        color: theme-based($theme-map, "main-color");
+        text-decoration-color: theme-based($theme-map, "main-color");
     }
 }
+
 .status-opponents-turn {
     @extend .status;
-    @include themify {
-        color: theme-based("you");
-        text-decoration-color: theme-based("you");
+
+    @include themify using ($theme-map) {
+        color: theme-based($theme-map, "you");
+        text-decoration-color: theme-based($theme-map, "you");
     }
 }
+
 .status-your-turn {
     @extend .status;
-    @include themify {
-        color: theme-based("opponent");
-        text-decoration-color: theme-based("opponent");
+
+    @include themify using ($theme-map) {
+        color: theme-based($theme-map, "opponent");
+        text-decoration-color: theme-based($theme-map, "opponent");
     }
 }
+
 .status-you-won {
     @extend .status;
-    @include themify {
-        color: theme-based("win");
-        text-decoration-color: theme-based("win");
+
+    @include themify using ($theme-map) {
+        color: theme-based($theme-map, "win");
+        text-decoration-color: theme-based($theme-map, "win");
     }
 }
+
 .status-you-lost {
     @extend .status;
-    @include themify {
-        color: theme-based("lose");
-        text-decoration-color: theme-based("lose");
+
+    @include themify using ($theme-map) {
+        color: theme-based($theme-map, "lose");
+        text-decoration-color: theme-based($theme-map, "lose");
     }
 }

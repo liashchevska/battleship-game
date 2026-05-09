@@ -1,5 +1,4 @@
-@import "_mixins.scss";
-@import "_color-palette";
+@use "./mixins" as *;
 @import "_variables";
 
 .board {
@@ -7,6 +6,7 @@
 }
 
 $players: "you", "opponent";
+
 .board-table {
     width: $board-size;
     height: $board-size;
@@ -14,26 +14,31 @@ $players: "you", "opponent";
     user-select: none;
     border-collapse: collapse;
     padding: 0;
+
     @each $player in $players {
         &.#{$player} .ship-part {
             @include ship-part-background($player);
         }
+
         // &.#{$player} .shot-hit {
         //     @include ship-part-background($player);
         // }
-        @include themify {
+        @include themify using ($theme-map) {
             &.#{$player} {
-                border: 3px solid theme-based($player);
+                border: 3px solid theme-based($theme-map, $player);
+
                 &:not(.disabled) {
-                    box-shadow: 0 0 10px 5px theme-based($player);
+                    box-shadow: 0 0 10px 5px theme-based($theme-map, $player);
                 }
             }
+
             &.#{$player} .shot-miss {
-                background-color: theme-based($player);
+                background-color: theme-based($theme-map, $player);
             }
+
             tr:nth-of-type(odd) td:nth-of-type(odd),
             tr:nth-of-type(even) td:nth-of-type(even) {
-                background-color: theme-based("square");
+                background-color: theme-based($theme-map, "square");
             }
         }
     }
@@ -44,6 +49,7 @@ $players: "you", "opponent";
     height: inherit;
     position: relative;
 }
+
 .shot-miss {
     width: 7px;
     height: 7px;
@@ -53,6 +59,7 @@ $players: "you", "opponent";
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
 .board-cell-content {
     width: inherit;
     height: inherit;
@@ -60,9 +67,10 @@ $players: "you", "opponent";
 }
 
 .board-cell {
-    @include themify {
-        border: $cell-border solid theme-based("board-cell-border");
+    @include themify using ($theme-map) {
+        border: $cell-border solid theme-based($theme-map, "board-cell-border");
     }
+
     padding: 0;
     width: $cell-size;
     height: $cell-size;
@@ -76,6 +84,7 @@ $players: "you", "opponent";
     top: 0;
     left: 0;
     z-index: 3;
+
     &:after {
         position: relative;
         vertical-align: -50%;
@@ -83,8 +92,9 @@ $players: "you", "opponent";
         font-size: $cell-size + 3px;
         content: "\d7";
         z-index: 33;
-        @include themify {
-            color: theme-based("hit");
+
+        @include themify using ($theme-map) {
+            color: theme-based($theme-map, "hit");
         }
     }
 }
@@ -92,16 +102,19 @@ $players: "you", "opponent";
 // move border to mixin --->
 .ship-placement {
     position: relative;
-    & > .board-table {
-        @include themify {
-            border: 3px solid theme-based("you");
-            box-shadow: 0 0 10px 5px theme-based("you");
+
+    &>.board-table {
+        @include themify using ($theme-map) {
+            border: 3px solid theme-based($theme-map, "you");
+            box-shadow: 0 0 10px 5px theme-based($theme-map, "you");
         }
     }
 }
+
 // <---
 
 $orientations: "HR", "VR";
+
 @for $length from 1 through 5 {
     @each $orientation in $orientations {
         @each $player in $players {
@@ -109,6 +122,7 @@ $orientations: "HR", "VR";
                 @include ship-part-background($player);
             }
         }
+
         .ship-#{$orientation}-#{$length} {
             z-index: 2;
             position: absolute;
@@ -116,8 +130,8 @@ $orientations: "HR", "VR";
             top: 0;
             left: 0;
 
-            $lw: if(sass($orientation == "HR"): $length; else: 1);
-            $lh: if(sass($orientation == "VR"): $length; else: 1);
+            $lw: if(sass($orientation =="HR"): $length; else: 1);
+            $lh: if(sass($orientation =="VR"): $length; else: 1);
 
             width: ($cell-size * $lw) + ($cell-border * ($lw - 1));
             height: ($cell-size * $lh) + ($cell-border * ($lh - 1));

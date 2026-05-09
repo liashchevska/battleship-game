@@ -1,40 +1,33 @@
 @use "sass:map";
-@import "_color-palette";
+@use "./color-palette" as *;
+@import "_variables";
+
 
 @mixin themify($themes: $themes) {
-    @each $theme, $map in $themes {
-        .theme-#{$theme} & {
-            $theme-map: () !global;
-            @each $key, $submap in $map {
-                $value: map.get(map.get($themes, $theme), "#{$key}");
-                $theme-map: map.merge(
-                    $theme-map,
-                    (
-                        $key: $value,
-                    )
-                ) !global;
-            }
-
-            @content;
-            $theme-map: null !global;
+    @each $theme-name, $theme-map in $themes {
+        .theme-#{$theme-name} & {
+            @content ($theme-map);
         }
     }
 }
-@function theme-based($key) {
+
+@function theme-based($theme-map, $key) {
     @return map.get($theme-map, $key);
 }
 
-// refactor ?
 @mixin base-button($key) {
-    @include themify {
-        border-color: theme-based($key);
+    @include themify using ($theme-map) {
+        $color: theme-based($theme-map, $key);
+        border-color: $color;
+
         &:hover {
             color: black;
-            background-color: theme-based($key);
-            // box-shadow: 0 0 10px 5px theme-based($key);
+            background-color: $color;
+            // box-shadow: 0 0 10px 5px $color;
             cursor: pointer;
         }
     }
+
     // background-color: transparent;
     background-color: transparent;
     width: $button-width;
@@ -49,16 +42,21 @@
 }
 
 $ship-border: 2px;
+
 @mixin ship-part-background($key) {
     margin-top: -$ship-border;
     margin-left: -$ship-border;
-    @include themify {
-        background-color: rgba($color: theme-based($key), $alpha: 0.5);
-        border: $ship-border solid theme-based($key);
+
+    @include themify using ($theme-map) {
+        $color: theme-based($theme-map, $key);
+        background-color: rgba($color, 0.5);
+        border: $ship-border solid $color;
     }
 }
+
+// Remove
 // @mixin border-shadow($key){
-//     @include themify{
-//         box-shadow: 0 0 10px 5px theme-based($key);
+//     @include themify using ($theme-map){
+//         box-shadow: 0 0 10px 5px theme-based($theme-map, $key);
 //     }
 // }
