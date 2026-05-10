@@ -1,5 +1,5 @@
-@use "./mixins" as *;
-@import "_variables";
+@use "./mixins";
+@use "./variables";
 
 .modal-wrapper {
     position: fixed;
@@ -12,16 +12,16 @@
 }
 
 .modal {
-    @include themify using ($theme-map) {
-        background-color: theme-based($theme-map, "page-background");
-        color: theme-based($theme-map, "font");
-        border: 3px solid theme-based($theme-map, "win");
-        box-shadow: 0 0 10px 5px theme-based($theme-map, "win");
+    @include mixins.themify using ($theme-map) {
+        background-color: mixins.theme-based($theme-map, "page-background");
+        color: mixins.theme-based($theme-map, "font");
+        border: 3px solid mixins.theme-based($theme-map, "win");
+        box-shadow: 0 0 10px 5px mixins.theme-based($theme-map, "win");
     }
 
     box-sizing: border-box;
-    width: $board-size * 1.5;
-    height: $board-size * 0.5;
+    width: variables.$board-size * 1.5;
+    height: variables.$board-size * 0.5;
     position: relative;
     top: 30%;
     left: 50%;
@@ -35,14 +35,14 @@
 }
 
 .modal-button {
-    @include base-button("win");
+    @include mixins.base-button("win");
 
-    @include themify using ($theme-map) {
-        background-color: theme-based($theme-map, "win");
+    @include mixins.themify using ($theme-map) {
+        background-color: mixins.theme-based($theme-map, "win");
     }
 
     color: black;
-    margin-top: $margin-size;
+    margin-top: variables.$margin-size;
 
     &:hover {
         background-color: transparent;

@@ -1,4 +1,4 @@
-@use './mixins' as *;
+@use './mixins';
 
 .status {
     text-decoration: underline;
@@ -10,44 +10,44 @@
 .status-waiting {
     @extend .status;
 
-    @include themify using ($theme-map) {
-        color: theme-based($theme-map, "main-color");
-        text-decoration-color: theme-based($theme-map, "main-color");
+    @include mixins.themify using ($theme-map) {
+        color: mixins.theme-based($theme-map, "main-color");
+        text-decoration-color: mixins.theme-based($theme-map, "main-color");
     }
 }
 
 .status-opponents-turn {
     @extend .status;
 
-    @include themify using ($theme-map) {
-        color: theme-based($theme-map, "you");
-        text-decoration-color: theme-based($theme-map, "you");
+    @include mixins.themify using ($theme-map) {
+        color: mixins.theme-based($theme-map, "you");
+        text-decoration-color: mixins.theme-based($theme-map, "you");
     }
 }
 
 .status-your-turn {
     @extend .status;
 
-    @include themify using ($theme-map) {
-        color: theme-based($theme-map, "opponent");
-        text-decoration-color: theme-based($theme-map, "opponent");
+    @include mixins.themify using ($theme-map) {
+        color: mixins.theme-based($theme-map, "opponent");
+        text-decoration-color: mixins.theme-based($theme-map, "opponent");
     }
 }
 
 .status-you-won {
     @extend .status;
 
-    @include themify using ($theme-map) {
-        color: theme-based($theme-map, "win");
-        text-decoration-color: theme-based($theme-map, "win");
+    @include mixins.themify using ($theme-map) {
+        color: mixins.theme-based($theme-map, "win");
+        text-decoration-color: mixins.theme-based($theme-map, "win");
     }
 }
 
 .status-you-lost {
     @extend .status;
 
-    @include themify using ($theme-map) {
-        color: theme-based($theme-map, "lose");
-        text-decoration-color: theme-based($theme-map, "lose");
+    @include mixins.themify using ($theme-map) {
+        color: mixins.theme-based($theme-map, "lose");
+        text-decoration-color: mixins.theme-based($theme-map, "lose");
     }
 }

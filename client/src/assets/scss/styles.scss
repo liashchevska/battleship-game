@@ -1,10 +1,8 @@
-@use "./mixins" as *;
-@use "./color-palette" as *;
-
-@import "_variables";
-@import "_board";
-@import "_game";
-@import "_modal";
+@use "./variables";
+@use "./mixins";
+@use "./board";
+@use "./modal";
+@use "./game";
 
 @import url("https://fonts.googleapis.com/css2?family=Special+Elite&display=swap");
 
@@ -15,8 +13,8 @@ body {
     margin: 0;
     overflow: auto;
 
-    @include themify using ($theme-map) {
-        background-color: theme-based($theme-map, "page-background");
+    @include mixins.themify using ($theme-map) {
+        background-color: mixins.theme-based($theme-map, "page-background");
     }
 }
 
@@ -31,23 +29,22 @@ body {
     // height: inherit;
 }
 
-#app>* {
+#app> * {
     text-align: center;
 
-    @include themify using ($theme-map) {
-        color: theme-based($theme-map, "font");
+    @include mixins.themify using ($theme-map) {
+        color: mixins.theme-based($theme-map, "font");
     }
 
-    font-family: "Special Elite",
-    cursive !important;
+    font-family: "Special Elite", cursive !important;
     font-size: 1.1em;
     text-transform: uppercase;
 }
 
 #app-title {
-    margin-top: $margin-size;
+    margin-top: variables.$margin-size;
     margin-bottom: 2%;
-    font-size: $title-font-size;
+    font-size: variables.$title-font-size;
     text-align: center;
 }
 
@@ -63,33 +60,33 @@ body {
     left: 0;
     height: 3px;
 
-    @include themify using ($theme-map) {
-        background: linear-gradient(90deg, theme-based($theme-map, "opponent") 50%, theme-based($theme-map, "you") 50%);
+    @include mixins.themify using ($theme-map) {
+        background: linear-gradient(90deg, mixins.theme-based($theme-map, "opponent") 50%, mixins.theme-based($theme-map, "you") 50%);
     }
 }
 
 .button-1 {
-    @include base-button("opponent");
+    @include mixins.base-button("opponent");
 
-    @include themify using ($theme-map) {
+    @include mixins.themify using ($theme-map) {
 
         &.selected-opponent,
         &.friend-selected {
             color: black;
-            background-color: theme-based($theme-map, "opponent");
+            background-color: mixins.theme-based($theme-map, "opponent");
         }
     }
 
     &.friend-selected {
-        width: $board-size !important;
+        width: variables.$board-size !important;
     }
 }
 
 .leave-button {
-    @include base-button("opponent");
+    @include mixins.base-button("opponent");
 
-    @include themify using ($theme-map) {
-        background-color: theme-based($theme-map, "opponent");
+    @include mixins.themify using ($theme-map) {
+        background-color: mixins.theme-based($theme-map, "opponent");
         color: black;
 
         &:hover {
@@ -100,7 +97,7 @@ body {
 }
 
 .opponent-select>.button-1 {
-    width: $button-width * 0.5;
+    width: variables.$button-width * 0.5;
 }
 
 .opponent-select button:not(:last-child) {
@@ -108,16 +105,16 @@ body {
     /* Prevent double borders */
 }
 
-$screen-width: 2 * $board-size + 4 * $margin-size + 15px;
+$screen-width: 2 * variables.$board-size + 4 * variables.$margin-size + 15px;
 @media screen and (min-width: $screen-width) {
     .leave-button {
-        margin-left: $button-width + $margin-size * 2;
+        margin-left: variables.$button-width + variables.$margin-size * 2;
     }
 }
 
 .link-itself {
-    @include themify using ($theme-map) {
-        color: theme-based($theme-map, "opponent");
+    @include mixins.themify using ($theme-map) {
+        color: mixins.theme-based($theme-map, "opponent");
     }
 
     &:hover {
@@ -127,7 +124,7 @@ $screen-width: 2 * $board-size + 4 * $margin-size + 15px;
 
 .looping-rhombuses-spinner {
     position: absolute !important;
-    top: calc(50% - #{$margin-size});
+    top: calc(50% - #{variables.$margin-size});
     left: 50%;
     transform: translate(-50%, -50%);
 }

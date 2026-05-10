@@ -1,5 +1,5 @@
-@use "./mixins" as *;
-@import "_variables";
+@use "./variables";
+@use "./mixins";
 
 .board {
     display: inline-block;
@@ -8,37 +8,37 @@
 $players: "you", "opponent";
 
 .board-table {
-    width: $board-size;
-    height: $board-size;
-    margin: $margin-size;
+    width: variables.$board-size;
+    height: variables.$board-size;
+    margin: variables.$margin-size;
     user-select: none;
     border-collapse: collapse;
     padding: 0;
 
     @each $player in $players {
         &.#{$player} .ship-part {
-            @include ship-part-background($player);
+            @include mixins.ship-part-background($player);
         }
 
         // &.#{$player} .shot-hit {
         //     @include ship-part-background($player);
         // }
-        @include themify using ($theme-map) {
+        @include mixins.themify using ($theme-map) {
             &.#{$player} {
-                border: 3px solid theme-based($theme-map, $player);
+                border: 3px solid mixins.theme-based($theme-map, $player);
 
                 &:not(.disabled) {
-                    box-shadow: 0 0 10px 5px theme-based($theme-map, $player);
+                    box-shadow: 0 0 10px 5px mixins.theme-based($theme-map, $player);
                 }
             }
 
             &.#{$player} .shot-miss {
-                background-color: theme-based($theme-map, $player);
+                background-color: mixins.theme-based($theme-map, $player);
             }
 
             tr:nth-of-type(odd) td:nth-of-type(odd),
             tr:nth-of-type(even) td:nth-of-type(even) {
-                background-color: theme-based($theme-map, "square");
+                background-color: mixins.theme-based($theme-map, "square");
             }
         }
     }
@@ -67,19 +67,19 @@ $players: "you", "opponent";
 }
 
 .board-cell {
-    @include themify using ($theme-map) {
-        border: $cell-border solid theme-based($theme-map, "board-cell-border");
+    @include mixins.themify using ($theme-map) {
+        border: variables.$cell-border solid mixins.theme-based($theme-map, "board-cell-border");
     }
 
     padding: 0;
-    width: $cell-size;
-    height: $cell-size;
-    border: $cell-border solid transparent;
+    width: variables.$cell-size;
+    height: variables.$cell-size;
+    border: variables.$cell-border solid transparent;
 }
 
 .shot-hit {
-    width: $cell-size;
-    height: $cell-size;
+    width: variables.$cell-size;
+    height: variables.$cell-size;
     position: absolute;
     top: 0;
     left: 0;
@@ -89,12 +89,12 @@ $players: "you", "opponent";
         position: relative;
         vertical-align: -50%;
         color: #fff;
-        font-size: $cell-size + 3px;
+        font-size: variables.$cell-size + 3px;
         content: "\d7";
         z-index: 33;
 
-        @include themify using ($theme-map) {
-            color: theme-based($theme-map, "hit");
+        @include mixins.themify using ($theme-map) {
+            color: mixins.theme-based($theme-map, "hit");
         }
     }
 }
@@ -104,9 +104,9 @@ $players: "you", "opponent";
     position: relative;
 
     &>.board-table {
-        @include themify using ($theme-map) {
-            border: 3px solid theme-based($theme-map, "you");
-            box-shadow: 0 0 10px 5px theme-based($theme-map, "you");
+        @include mixins.themify using ($theme-map) {
+            border: 3px solid mixins.theme-based($theme-map, "you");
+            box-shadow: 0 0 10px 5px mixins.theme-based($theme-map, "you");
         }
     }
 }
@@ -119,7 +119,7 @@ $orientations: "HR", "VR";
     @each $orientation in $orientations {
         @each $player in $players {
             .#{$player} .ship-#{$orientation}-#{$length} {
-                @include ship-part-background($player);
+                @include mixins.ship-part-background($player);
             }
         }
 
@@ -133,12 +133,12 @@ $orientations: "HR", "VR";
             $lw: if(sass($orientation =="HR"): $length; else: 1);
             $lh: if(sass($orientation =="VR"): $length; else: 1);
 
-            width: ($cell-size * $lw) + ($cell-border * ($lw - 1));
-            height: ($cell-size * $lh) + ($cell-border * ($lh - 1));
+            width: (variables.$cell-size * $lw) + (variables.$cell-border * ($lw - 1));
+            height: (variables.$cell-size * $lh) + (variables.$cell-border * ($lh - 1));
 
             border-radius: 2px;
 
-            @include ship-part-background("you");
+            @include mixins.ship-part-background("you");
         }
     }
 }
