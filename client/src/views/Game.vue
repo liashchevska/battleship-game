@@ -119,6 +119,7 @@ export default {
       let data = JSON.parse(event.data);
       this.onSocketMessage(data);
     },
+    // FIX: Remove v-clipboard, use  
     copyLink() {
       this.$clipboard(this.link);
       alert("Link was copied!");

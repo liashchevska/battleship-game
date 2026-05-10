@@ -1,10 +1,8 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import axios from "axios";
-import router from "@/router";
+import { createStore } from 'vuex'
 import { zeros } from "../helpers";
+import router from "@/router";
+import axios from "axios";
 
-Vue.use(Vuex);
 
 const initialState = {
   gameId: null,
@@ -28,7 +26,7 @@ const mutate = (state, prop, value) => {
   state[prop] = value;
 };
 
-export default new Vuex.Store({
+export default createStore({
   state: {
     ...initialState,
 
@@ -104,7 +102,7 @@ export default new Vuex.Store({
     initSocket({ commit, dispatch }, payload) {
       commit("addListeners", payload.handler);
       dispatch("randomizeShips");
-      let gameId = router.currentRoute.params.id;
+      let gameId = router.currentRoute.value.params.id;
       gameId = gameId == undefined ? null : gameId;
       let friend = gameId == null ? false : true;
       commit("setOpponent", friend);
@@ -191,7 +189,7 @@ export default new Vuex.Store({
     resetGame({ commit, dispatch }) {
       commit("reset");
       dispatch("randomizeShips");
-      if (router.history.current.path != "/") {
+      if (router.currentRoute.value.path != "/") {
         router.push({ name: "Game" });
       }
     },

@@ -100,7 +100,7 @@ export default {
 
       let currentBoard = placeShips(this.rows, this.cols, tempShips);
       if (isPlacementPossible(currentBoard, ship, this.rows, this.cols)) {
-        this.$set(this.ships, shipIndex, ship);
+        this.ships[shipIndex] = ship;
       }
     },
     rotate(event, shipIndex) {
@@ -153,7 +153,7 @@ export default {
 
       let currentBoard = placeShips(this.rows, this.cols, tempShips);
       if (isPlacementPossible(currentBoard, ship, this.rows, this.cols)) {
-        this.$set(this.ships, shipIndex, ship);
+        this.ships[shipIndex] = ship;
       }
     },
   },
