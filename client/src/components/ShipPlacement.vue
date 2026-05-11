@@ -55,8 +55,6 @@ import {
   zeros,
 } from "../helpers";
 
-var _ = require("lodash");
-
 export default {
   props: {
     rows: Number,
@@ -116,7 +114,7 @@ export default {
 
       let diffRow = getDifference(ship.rows, offsetRow);
       let diffCol = getDifference(ship.cols, offsetCol);
-      let maxDiff = _.max([diffRow, diffCol]);
+      let maxDiff = Math.max(diffRow, diffCol);
 
       let size = maxDiff * 2 + 1;
 

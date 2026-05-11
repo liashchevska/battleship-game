@@ -1,4 +1,4 @@
-var _ = require("lodash");
+import { toRaw } from "vue";
 
 export function getSocketUrl(url, gameId) {
   gameId = gameId ? gameId : "";
@@ -67,7 +67,7 @@ export function getOffset(event) {
 }
 
 export function getTempShipsAndNewShip(ships, shipIndex) {
-  let tempShips = _.cloneDeep(ships);
+  let tempShips = structuredClone(toRaw(ships));
   let ship = tempShips.splice(shipIndex, 1)[0];
   return [tempShips, ship];
 }
@@ -81,7 +81,7 @@ export function flipMatrix(matrix) {
 }
 
 export function rotateMatrix(matrix) {
-  matrix = _.cloneDeep(matrix);
+  matrix = structuredClone(toRaw(matrix));
   return flipMatrix(matrix.reverse());
 }
 
