@@ -25,7 +25,6 @@ export default defineConfig([
 
     {
         rules: {
-            'vue/multi-word-component-names': 0, // ! Remove later, rename components.
             'no-console': 'warn',
             'no-debugger': 'warn'
         },

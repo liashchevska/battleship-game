@@ -15,8 +15,8 @@
     </div>
 
     <template v-if="shipsPlaced">
-      <Status :waiting="!gameStarted && shipsPlaced" />
-      <Board
+      <GameStatus :waiting="!gameStarted && shipsPlaced" />
+      <GameBoard
         :rows="rows"
         :cols="cols"
         :ships="ships"
@@ -25,7 +25,7 @@
         :yours="true"
         :waiting="false"
       />
-      <Board
+      <GameBoard
         :rows="rows"
         :cols="cols"
         :ships="opponentShips"
@@ -48,14 +48,14 @@ import { mapActions, mapState } from "vuex";
 import { zeros, getBoard } from "../helpers";
 import ShipPlacement from "@/components/ShipPlacement.vue";
 import OpponentSelect from "@/components/OpponentSelect.vue";
-import Status from "@/components/Status.vue";
-import Board from "@/components/Board.vue";
+import GameStatus from "@/components/GameStatus.vue";
+import GameBoard from "@/components/GameBoard.vue";
 import GameIsInvalidModal from "@/components/GameIsInvalidModal.vue";
 export default {
   components: {
     ShipPlacement,
-    Status,
-    Board,
+    GameStatus,
+    GameBoard,
     OpponentSelect,
     GameIsInvalidModal
   },
