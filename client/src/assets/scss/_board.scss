@@ -28,7 +28,7 @@ $players: "you", "opponent";
                 border: 3px solid mixins.theme-based($theme-map, $player);
 
                 &:not(.disabled) {
-                    box-shadow: 0 0 10px 5px mixins.theme-based($theme-map, $player);
+                    box-shadow: 0 0 5px mixins.theme-based($theme-map, $player);
                 }
             }
 
@@ -106,7 +106,6 @@ $players: "you", "opponent";
     &>.board-table {
         @include mixins.themify using ($theme-map) {
             border: 3px solid mixins.theme-based($theme-map, "you");
-            box-shadow: 0 0 10px 5px mixins.theme-based($theme-map, "you");
         }
     }
 }

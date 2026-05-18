@@ -1,15 +1,19 @@
 $themes: (
-  "dark": (
-    "font": white,
-    "page-background": #0d1117,
-    "board-cell-border": transparent,
-    "player": black,
-    "square": #1f2733,
-    "table-border": #fff700,
-    "you": #ff355e,
-    "opponent": #b2f302,
-    "win": #31ceaa,
-    "hit": white,
-    "lose": #ff0000,
+  "dark": ("font": #dbeafe,
+    "page-background": #13202e,
+
+    "board-cell-border": rgba(255, 255, 255, 0.03),
+    "square": #203247,
+
+    "table-border": #0ea5e9,
+
+    "player": #4b5563,
+
+    "you": #38bdf8,
+    "opponent": #14b8a6,
+
+    "win": #2dd4bf,
+    "hit": #ffffff,
+    "lose": #fb7185,
   ),
 );

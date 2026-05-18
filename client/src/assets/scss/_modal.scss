@@ -16,7 +16,6 @@
         background-color: mixins.theme-based($theme-map, "page-background");
         color: mixins.theme-based($theme-map, "font");
         border: 3px solid mixins.theme-based($theme-map, "win");
-        box-shadow: 0 0 10px 5px mixins.theme-based($theme-map, "win");
     }
 
     box-sizing: border-box;

@@ -49,14 +49,7 @@ $ship-border: 2px;
 
     @include themify using ($theme-map) {
         $color: theme-based($theme-map, $key);
-        background-color: rgba($color, 0.5);
-        border: $ship-border solid $color;
+        background-color: rgba($color, 0.45);
+        border: $ship-border solid rgba($color, 0.85);
     }
 }
-
-// Remove
-// @mixin border-shadow($key){
-//     @include themify using ($theme-map){
-//         box-shadow: 0 0 10px 5px theme-based($theme-map, $key);
-//     }
-// }
