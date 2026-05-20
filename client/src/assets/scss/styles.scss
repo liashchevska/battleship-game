@@ -98,12 +98,20 @@ body {
 }
 
 .opponent-select>.button-1 {
+    border-radius: 0;
     width: variables.$button-width * 0.5;
 }
 
-.opponent-select button:not(:last-child) {
-    border-right: none;
-    /* Prevent double borders */
+.opponent-select .button-1:first-of-type {
+    border-top-left-radius: variables.$button-radius;
+    border-bottom-left-radius: variables.$button-radius;
+    border-right: 0;
+}
+
+.opponent-select .button-1:last-of-type {
+    border-top-right-radius: variables.$button-radius;
+    border-bottom-right-radius: variables.$button-radius;
+    border-left: 0;
 }
 
 $screen-width: 2 * variables.$board-size + 4 * variables.$margin-size + 15px;
