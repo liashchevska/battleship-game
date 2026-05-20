@@ -29,14 +29,15 @@ body {
     // height: inherit;
 }
 
-#app> * {
+#app>* {
     text-align: center;
 
     @include mixins.themify using ($theme-map) {
         color: mixins.theme-based($theme-map, "font");
     }
 
-    font-family: "Special Elite", cursive !important;
+    font-family: "Special Elite",
+    cursive !important;
     font-size: 1.1em;
     text-transform: uppercase;
 }
@@ -122,7 +123,7 @@ $screen-width: 2 * variables.$board-size + 4 * variables.$margin-size + 15px;
     }
 }
 
-.looping-rhombuses-spinner {
+.circles-to-rhombuses-spinner {
     position: absolute !important;
     top: calc(50% - #{variables.$margin-size});
     left: 50%;

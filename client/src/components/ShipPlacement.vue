@@ -1,10 +1,10 @@
 <template>
   <div v-if="board" class="board ship-placement">
-    <looping-rhombuses-spinner
+    <circles-to-rhombuses-spinner
       v-if="loading"
       :animation-duration="2500"
       :rhombus-size="15"
-      :color="'#ff1d5e'"
+      :color="'#38bdf8'"
     />
     <table class="board-table">
       <tbody>
@@ -40,7 +40,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import { LoopingRhombusesSpinner } from "epic-spinners";
+import { CirclesToRhombusesSpinner } from "epic-spinners";
 
 import {
   getBoard,
@@ -61,7 +61,7 @@ export default {
     cols: Number,
   },
   components: {
-    LoopingRhombusesSpinner,
+    CirclesToRhombusesSpinner,
   },
   computed: {
     ...mapState(["ships", "loading"]),
