@@ -16,24 +16,10 @@
 
     <template v-if="shipsPlaced">
       <GameStatus :waiting="!gameStarted && shipsPlaced" />
-      <GameBoard
-        :rows="rows"
-        :cols="cols"
-        :ships="ships"
-        :board="getBoard(rows, cols, ships)"
-        :shots="shots"
-        :yours="true"
-        :waiting="false"
-      />
-      <GameBoard
-        :rows="rows"
-        :cols="cols"
-        :ships="opponentShips"
-        :board="getBoard(rows, cols, opponentShips)"
-        :shots="opponent"
-        :yours="false"
-        :waiting="!gameStarted && shipsPlaced"
-      />
+      <GameBoard :rows="rows" :cols="cols" :ships="ships" :board="getBoard(rows, cols, ships)" :shots="shots"
+        :yours="true" :waiting="false" />
+      <GameBoard :rows="rows" :cols="cols" :ships="opponentShips" :board="getBoard(rows, cols, opponentShips)"
+        :shots="opponent" :yours="false" :waiting="!gameStarted && shipsPlaced" />
       <div>
         <button class="btn btn-primary btn-leave" @click="leaveGame">
           leave game
@@ -51,6 +37,8 @@ import OpponentSelect from "@/components/OpponentSelect.vue";
 import GameStatus from "@/components/GameStatus.vue";
 import GameBoard from "@/components/GameBoard.vue";
 import GameIsInvalidModal from "@/components/GameIsInvalidModal.vue";
+import { useClipboard } from '@vueuse/core'
+
 export default {
   components: {
     ShipPlacement,
@@ -58,6 +46,14 @@ export default {
     GameBoard,
     OpponentSelect,
     GameIsInvalidModal
+  },
+
+  setup() {
+    const { text, copy, copied, isSupported } = useClipboard({
+      legacy: true
+    })
+
+    return { text, copy, copied, isSupported }
   },
   data() {
     return {
@@ -119,10 +115,11 @@ export default {
       let data = JSON.parse(event.data);
       this.onSocketMessage(data);
     },
-    // FIX: Remove v-clipboard, use  
     copyLink() {
-      this.$clipboard(this.link);
-      alert("Link was copied!");
+      if (this.isSupported) {
+        this.copy(this.link);
+        alert("Link was copied!");
+      }
     }
   }
 };
