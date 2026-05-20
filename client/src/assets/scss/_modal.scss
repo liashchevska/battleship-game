@@ -34,8 +34,7 @@
 }
 
 .modal-button {
-    @include mixins.base-button("win");
-
+    @include mixins.base-button;
     @include mixins.themify using ($theme-map) {
         background-color: mixins.theme-based($theme-map, "win");
     }

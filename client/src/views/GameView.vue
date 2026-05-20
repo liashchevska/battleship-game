@@ -4,7 +4,7 @@
     <template v-if="!shipsPlaced">
       <ShipPlacement :rows="rows" :cols="cols" />
       <OpponentSelect />
-      <button class="button-1" @click="startGame">start game</button>
+      <button class="btn btn-primary" @click="startGame">start game</button>
     </template>
 
     <div v-if="friendAsOpponent && shipsPlaced && !gameStarted">
@@ -35,7 +35,7 @@
         :waiting="!gameStarted && shipsPlaced"
       />
       <div>
-        <button class="button-1 leave-button" @click="leaveGame">
+        <button class="btn btn-primary btn-leave" @click="leaveGame">
           leave game
         </button>
       </div>

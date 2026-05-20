@@ -34,7 +34,7 @@
         </tr>
       </tbody>
     </table>
-    <button class="button-1" @click="randomizeShips">randomize ships</button>
+    <button class="btn btn-secondary" @click="randomizeShips">randomize ships</button>
   </div>
 </template>
 

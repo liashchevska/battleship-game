@@ -2,23 +2,15 @@
   <div class="opponent-select">
     <div :style="{ 'margin-bottom': '5px' }">opponent type:</div>
     <template v-if="gameId == null">
-      <button
-        :class="{ 'selected-opponent': friendAsOpponent == false }"
-        class="button-1"
-        @click="createGameWithRandomOpponent"
-      >
+      <button :class="['btn', !friendAsOpponent ? 'btn-primary' : 'btn-secondary']" @click="createGameWithRandomOpponent">
         random
       </button>
-      <button
-        :class="{ 'selected-opponent': friendAsOpponent == true }"
-        class="button-1"
-        @click="createGameWithFriendOpponent"
-      >
+      <button :class="['btn', friendAsOpponent ? 'btn-primary' : 'btn-secondary']" @click="createGameWithFriendOpponent">
         friend
       </button>
     </template>
     <template v-else>
-      <button class="friend-selected button-1">friend</button>
+      <button class="btn btn-primary friend-selected ">friend</button>
     </template>
   </div>
 </template>

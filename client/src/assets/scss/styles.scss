@@ -39,56 +39,57 @@ body {
     font-family: monospace;
 }
 
-// #app-title {
-//     margin-top: variables.$margin-size;
-//     margin-bottom: 2%;
-//     font-size: variables.$title-font-size;
-//     text-align: center;
-// }
 
-.button-1 {
-    @include mixins.base-button("opponent");
+.btn {
+    @include mixins.base-button;
+}
 
+.btn-primary {
     @include mixins.themify using ($theme-map) {
+        $color: mixins.theme-based($theme-map, 'opponent');
 
-        &.selected-opponent,
-        &.friend-selected {
-            color: black;
-            background-color: mixins.theme-based($theme-map, "opponent");
-        }
-    }
-
-    &.friend-selected {
-        width: variables.$board-size !important;
+        background-color: rgba($color, 0.85);
+        border-color: rgba($color, 0.85);
     }
 }
 
-.leave-button {
-    @include mixins.base-button("opponent");
-
+.btn-secondary {
     @include mixins.themify using ($theme-map) {
-        background-color: mixins.theme-based($theme-map, "opponent");
-        color: black;
+        $color: mixins.theme-based($theme-map, 'opponent');
+
+        background-color: rgba($color, 0.15);
+        border-color: rgba($color, 0.85);
+    }
+}
+
+.btn-primary,
+.btn-secondary {
+    @include mixins.themify using ($theme-map) {
+        $color: mixins.theme-based($theme-map, 'opponent');
 
         &:hover {
-            background-color: transparent;
-            color: white;
+            background-color: $color;
+            border-color: $color;
         }
     }
 }
 
-.opponent-select>.button-1 {
+.friend-selected {
+    width: variables.$button-width !important;
+}
+
+.opponent-select>.btn {
     border-radius: 0;
     width: variables.$button-width * 0.5;
 }
 
-.opponent-select .button-1:first-of-type {
+.opponent-select .btn:first-of-type {
     border-top-left-radius: variables.$button-radius;
     border-bottom-left-radius: variables.$button-radius;
     border-right: 0;
 }
 
-.opponent-select .button-1:last-of-type {
+.opponent-select .btn:last-of-type {
     border-top-right-radius: variables.$button-radius;
     border-bottom-right-radius: variables.$button-radius;
     border-left: 0;
@@ -96,7 +97,7 @@ body {
 
 $screen-width: 2 * variables.$board-size + 4 * variables.$margin-size + 15px;
 @media screen and (min-width: $screen-width) {
-    .leave-button {
+    .btn-leave {
         margin-left: variables.$button-width + variables.$margin-size * 2;
     }
 }
