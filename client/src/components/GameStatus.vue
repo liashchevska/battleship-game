@@ -1,20 +1,17 @@
 <template>
   <div class="game-status">
-    <p
-      v-if="!waiting && !isOver && !opponentLeft"
-      :class="[
-        !waiting && yourTurn ? 'status-your-turn' : 'status-opponents-turn '
-      ]"
-    >
-      It's {{ yourTurn ? "YOUR" : "OPPONENT'S" }} turn.
-    </p>
-    <p v-if="waiting" class="status-waiting">Waiting for an opponent.</p>
-    <p v-if="isOver" :class="youWon ? 'status-you-won' : 'status-you-lost'">
+    <h2 v-if="!waiting && !isOver && !opponentLeft" :class="[
+      !waiting && yourTurn ? 'status-your-turn' : 'status-opponents-turn '
+    ]">
+      It's {{ yourTurn ? "your" : "opponents's" }} turn.
+    </h2>
+    <h2 v-if="waiting" class="status-waiting">waiting for an opponent</h2>
+    <h2 v-if="isOver" :class="youWon ? 'status-you-won' : 'status-you-lost'">
       Game over. You {{ youWon ? "won!" : "lost!" }}
-    </p>
-    <p v-if="opponentLeft && !isOver" class="status-opponent-left">
+    </h2>
+    <h2 v-if="opponentLeft && !isOver" class="status-opponent-left">
       Opponent has left the game.
-    </p>
+    </h2>
   </div>
 </template>
 

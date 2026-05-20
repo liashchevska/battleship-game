@@ -1,8 +1,8 @@
 <template>
   <div v-if="shots" :class="[yours ? 'you' : 'opponent', 'board']">
-    <div class="board-owner">
-      {{ yours ? "YOUR BOARD" : "OPPONENT'S BOARD" }}
-    </div>
+    <h3 class="board-owner">
+      {{ yours ? "you" : "opponent" }}
+    </h3>
     <table
       class="board-table"
       :class="[yours ? 'you' : 'opponent', isDisabled ? 'disabled' : 'active']"

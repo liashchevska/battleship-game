@@ -1,10 +1,6 @@
 <template>
-  <div id="app">
-    <div id="app-title">
-      <span>battleship.</span>
-    </div>
-    <router-view />
-  </div>
+  <h1 id="app-title">battleship</h1>
+  <router-view />
 </template>
 
 <script>

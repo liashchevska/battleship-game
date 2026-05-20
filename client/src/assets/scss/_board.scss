@@ -106,10 +106,10 @@ $players: "you", "opponent";
     &>.board-table {
         @include mixins.themify using ($theme-map) {
             border: 3px solid mixins.theme-based($theme-map, "you");
+            border-radius: variables.$button-radius;
         }
     }
 }
-
 // <---
 
 $orientations: "HR", "VR";

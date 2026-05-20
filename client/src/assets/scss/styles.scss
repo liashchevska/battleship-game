@@ -36,35 +36,15 @@ body {
         color: mixins.theme-based($theme-map, "font");
     }
 
-    font-family: "Special Elite",
-    cursive !important;
-    font-size: 1.1em;
-    text-transform: uppercase;
+    font-family: monospace;
 }
 
-#app-title {
-    margin-top: variables.$margin-size;
-    margin-bottom: 2%;
-    font-size: variables.$title-font-size;
-    text-align: center;
-}
-
-#app-title span {
-    position: relative;
-}
-
-#app-title span:before {
-    content: "";
-    position: absolute;
-    top: 100%;
-    width: 100%;
-    left: 0;
-    height: 3px;
-
-    @include mixins.themify using ($theme-map) {
-        background: linear-gradient(90deg, mixins.theme-based($theme-map, "opponent") 50%, mixins.theme-based($theme-map, "you") 50%);
-    }
-}
+// #app-title {
+//     margin-top: variables.$margin-size;
+//     margin-bottom: 2%;
+//     font-size: variables.$title-font-size;
+//     text-align: center;
+// }
 
 .button-1 {
     @include mixins.base-button("opponent");
@@ -136,4 +116,24 @@ $screen-width: 2 * variables.$board-size + 4 * variables.$margin-size + 15px;
     top: calc(50% - #{variables.$margin-size});
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+body {
+    font-size: 1rem;
+    line-height: 1.5;
 }

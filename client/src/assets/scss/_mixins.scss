@@ -33,8 +33,8 @@
     }
 
     width: variables.$button-width;
-    padding: 10px 5px 5px 5px;
-    border-width: 2px;
+    padding: 5px;
+    border-width: variables.$button-border;
     border-style: solid;
     margin-bottom: variables.$margin-size;
     color: inherit;
