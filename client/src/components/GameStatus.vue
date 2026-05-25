@@ -1,12 +1,16 @@
 <template>
   <div class="game-status">
-    game status: {{ currentStatus }}
+    game status: {{ currentStatus }}<ThreeDots v-if="this.waiting" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import ThreeDots from "./ThreeDots.vue";
 export default {
+  components: {
+    ThreeDots,
+  },
   props: {
     waiting: Boolean
   },
