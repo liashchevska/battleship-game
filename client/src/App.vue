@@ -1,5 +1,5 @@
 <template>
-  <h1 id="app-title">battleship</h1>
+  <h1 class="app-title">battleship</h1>
   <router-view />
 </template>
 
@@ -12,7 +12,7 @@ export default {
 </script>
 
 <style lang="scss">
-#id {
-  background-color: transparent;
+.app-title {
+  text-align: center;
 }
 </style>

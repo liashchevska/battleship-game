@@ -1,10 +1,8 @@
 <template>
   <div class="modal-wrapper">
     <div class="modal">
-      <div class="modal-body">
-        <div>Sorry, this game is unavailable.</div>
-        <button @click="resetGame" class="btn-primary modal-button">OK</button>
-      </div>
+      <div>Sorry, this game is unavailable.</div>
+      <button @click="resetGame" class="btn-primary modal-button">OK</button>
     </div>
   </div>
 </template>

@@ -16,14 +16,15 @@
 
     <template v-if="shipsPlaced">
       <GameStatus :waiting="!gameStarted && shipsPlaced" />
-      <GameBoard :rows="rows" :cols="cols" :ships="ships" :board="getBoard(rows, cols, ships)" :shots="shots"
-        :yours="true" :waiting="false" />
-      <GameBoard :rows="rows" :cols="cols" :ships="opponentShips" :board="getBoard(rows, cols, opponentShips)"
-        :shots="opponent" :yours="false" :waiting="!gameStarted && shipsPlaced" />
-      <div>
-        <button class="btn btn-primary btn-leave" @click="leaveGame">
-          leave game
-        </button>
+      <div class="boards">
+        <GameBoard :rows="rows" :cols="cols" :ships="ships" :board="getBoard(rows, cols, ships)" :shots="shots"
+          :yours="true" :waiting="false" />
+
+        <div class="opponent-section">
+          <GameBoard :rows="rows" :cols="cols" :ships="opponentShips" :board="getBoard(rows, cols, opponentShips)"
+            :shots="opponent" :yours="false" :waiting="!gameStarted && shipsPlaced" />
+          <button class="btn btn-primary btn-leave" @click="leaveGame"> leave game </button>
+        </div>
       </div>
     </template>
   </div>
@@ -124,3 +125,33 @@ export default {
   }
 };
 </script>
+
+
+<style lang="scss">
+@use '@/assets/scss/variables';
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: variables.$gap-sm;
+}
+
+.boards {
+  display: flex;
+  flex-direction: column;
+  gap: variables.$gap-md;
+
+  // Change min-width
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.opponent-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: variables.$gap-md;
+}
+</style>

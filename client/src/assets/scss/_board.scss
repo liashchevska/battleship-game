@@ -1,16 +1,11 @@
 @use "./variables";
 @use "./mixins";
 
-.board {
-    display: inline-block;
-}
-
 $players: "you", "opponent";
 
 .board-table {
     width: variables.$board-size;
     height: variables.$board-size;
-    margin: variables.$margin-size;
     user-select: none;
     border-collapse: collapse;
     padding: 0;
@@ -20,12 +15,9 @@ $players: "you", "opponent";
             @include mixins.ship-part-background($player);
         }
 
-        // &.#{$player} .shot-hit {
-        //     @include ship-part-background($player);
-        // }
         @include mixins.themify using ($theme-map) {
             &.#{$player} {
-                border: 3px solid mixins.theme-based($theme-map, $player);
+                border: variables.$button-border solid mixins.theme-based($theme-map, $player);
 
                 &:not(.disabled) {
                     box-shadow: 0 0 5px mixins.theme-based($theme-map, $player);
@@ -102,10 +94,13 @@ $players: "you", "opponent";
 // move border to mixin --->
 .ship-placement {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: variables.$gap-sm;
 
     &>.board-table {
         @include mixins.themify using ($theme-map) {
-            border: 3px solid mixins.theme-based($theme-map, "you");
+            border: variables.$button-border solid mixins.theme-based($theme-map, "you");
             border-radius: variables.$button-radius;
         }
     }

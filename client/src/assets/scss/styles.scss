@@ -8,30 +8,24 @@
 
 html,
 body {
-    min-width: fit-content;
-    height: 100%;
+    min-height: 100vh;
     margin: 0;
-    overflow: auto;
+    overflow-x: hidden;
 
     @include mixins.themify using ($theme-map) {
         background-color: mixins.theme-based($theme-map, "page-background");
     }
 }
 
-*,
-*:focus,
-*:hover {
-    outline: none;
+*:focus-visible {
+    outline: 2px solid white;
 }
 
 #app {
-    width: inherit;
-    // height: inherit;
+    min-height: 100vh;
 }
 
 #app>* {
-    text-align: center;
-
     @include mixins.themify using ($theme-map) {
         color: mixins.theme-based($theme-map, "font");
     }
@@ -93,13 +87,6 @@ body {
     border-top-right-radius: variables.$button-radius;
     border-bottom-right-radius: variables.$button-radius;
     border-left: 0;
-}
-
-$screen-width: 2 * variables.$board-size + 4 * variables.$margin-size + 15px;
-@media screen and (min-width: $screen-width) {
-    .btn-leave {
-        margin-left: variables.$button-width + variables.$margin-size * 2;
-    }
 }
 
 .link-itself {
