@@ -1,40 +1,17 @@
 <template>
   <div v-if="shots" :class="[yours ? 'you' : 'opponent', 'board']">
-    <h3 class="board-owner">
-      {{ yours ? "you" : "opponent" }}
-    </h3>
-    <table
-      class="board-table"
-      :class="[yours ? 'you' : 'opponent', isDisabled ? 'disabled' : 'active']"
-    >
+    <h3 class="board-owner">{{ owner }} </h3>
+    <table class="board-table" :class="[owner, isDisabled ? 'disabled' : 'active']">
       <tbody>
         <tr v-for="(_, x) in rows" :key="x">
           <td v-for="(_, y) in cols" :key="y" class="board-cell">
-            <div
-              @click="
-                if (isClickable(x, y)) {
-                  makeMove({ x: x, y: y });
-                }
-              "
-              class="board-cell-content"
-            >
+            <div @click="onCellClick(x, y)" class="board-cell-content">
               &nbsp;
-              <div
-                :class="{
-                  'shot-miss': shots[x][y] == 1,
-                  'shot-hit': shots[x][y] == 2
-                }"
-              ></div>
-              <div
-                :class="[
-                  board[x][y] != -1
-                    ? getShipClassName(
-                        ships[board[x][y]]['length'],
-                        ships[board[x][y]]['orientation']
-                      )
-                    : ''
-                ]"
-              ></div>
+              <div :class="{
+                'shot-miss': shots[x][y] == 1,
+                'shot-hit': shots[x][y] == 2
+              }"></div>
+              <div :class="getCellClass(x, y)"></div>
             </div>
           </td>
         </tr>
@@ -69,6 +46,12 @@ export default {
     },
     isActive() {
       return !(this.waiting || this.isOver || this.opponentLeft);
+    },
+    owner() {
+      return this.yours ? 'you' : 'opponent'
+    },
+    status() {
+      return ''
     }
   },
   methods: {
@@ -76,8 +59,17 @@ export default {
     isClickable(x, y) {
       return !this.waiting && !this.yours && this.shots[x][y] == 0;
     },
-    getShipClassName(length, orientation) {
-      return `ship-${orientation}-${length}`;
+    onCellClick(x, y) {
+      if (this.isClickable(x, y)) {
+        this.makeMove({ x: x, y: y })
+      }
+    },
+    getCellClass(x, y) {
+      if (this.board[x][y] != -1) {
+        const { length, orientation } = this.ships[this.board[x][y]]
+        return `ship-${orientation}-${length}`
+      }
+      return ''
     }
   }
 };
