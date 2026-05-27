@@ -1,5 +1,5 @@
 <template>
-  <h1 class="app-title">battleship</h1>
+  <h1 class="app-title text-title">battleship</h1>
   <router-view />
 </template>
 

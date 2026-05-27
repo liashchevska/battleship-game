@@ -1,7 +1,9 @@
 <template>
-  <div class="game-status">
-    game status: {{ currentStatus }}<ThreeDots v-if="this.waiting" />
-  </div>
+  <h2 class="game-status">
+    <!-- <span class="text-label"> game status: </span> -->
+    <span class="text-label"> {{ currentStatus }}</span>
+    <ThreeDots v-if="this.waiting" />
+  </h2>
 </template>
 
 <script>

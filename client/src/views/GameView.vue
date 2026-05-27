@@ -1,6 +1,7 @@
 <template>
   <div class="game-container">
     <GameIsInvalidModal v-if="gameIsInvalid" />
+
     <template v-if="!shipsPlaced">
       <ShipPlacement :rows="rows" :cols="cols" />
       <OpponentSelect />
@@ -16,15 +17,18 @@
 
     <template v-if="shipsPlaced">
       <GameStatus :waiting="!gameStarted && shipsPlaced" />
-      <div class="boards">
-        <GameBoard :rows="rows" :cols="cols" :ships="ships" :board="getBoard(rows, cols, ships)" :shots="shots"
-          :yours="true" :waiting="false" />
 
-        <div class="opponent-section">
-          <GameBoard :rows="rows" :cols="cols" :ships="opponentShips" :board="getBoard(rows, cols, opponentShips)"
-            :shots="opponent" :yours="false" :waiting="!gameStarted && shipsPlaced" />
-          <button class="btn btn-primary btn-leave" @click="leaveGame"> leave game </button>
-        </div>
+      <div class="boards">
+        <GameBoard :isActive="!yourTurn" owner="you" :state="yourTurn ? 'waiting' : 'their turn'" :rows="rows" :cols="cols" :ships="ships"
+          :board="getBoard(rows, cols, ships)" :shots="shots" :yours="true" :waiting="false" />
+
+        <GameBoard :isActive="yourTurn" owner="opponent" :state="yourTurn ? 'your turn' : 'waiting'" :rows="rows" :cols="cols"
+          :ships="opponentShips" :board="getBoard(rows, cols, opponentShips)" :shots="opponent" :yours="false"
+          :waiting="!gameStarted && shipsPlaced">
+          <template #actions>
+            <button class="btn btn-primary btn-leave" @click="leaveGame"> leave game </button>
+          </template>
+        </GameBoard>
       </div>
     </template>
   </div>
@@ -59,7 +63,6 @@ export default {
   data() {
     return {
       dummyBoard: [],
-      showModal: false
     };
   },
   computed: {
@@ -148,7 +151,7 @@ export default {
   }
 }
 
-.opponent-section {
+.player-section {
   display: flex;
   flex-direction: column;
   align-items: center;

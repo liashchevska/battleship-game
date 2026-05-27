@@ -1,6 +1,10 @@
 <template>
   <div v-if="shots" :class="[yours ? 'you' : 'opponent', 'board']">
-    <h3 class="board-owner">{{ owner }} </h3>
+    <div class="board-header text-muted">
+      <span class="text-label"> {{ owner }}</span>
+      <StatusIndicator :isActive="isActive" :text="state"/>
+    </div>
+
     <table class="board-table" :class="[owner, isDisabled ? 'disabled' : 'active']">
       <tbody>
         <tr v-for="(_, x) in rows" :key="x">
@@ -17,23 +21,35 @@
         </tr>
       </tbody>
     </table>
+
+    <div class="board-footer">
+      <slot name="actions"></slot>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from "vuex";
 import { getCellClass as _getCellClass } from "../helpers";
+import StatusIndicator from "./StatusIndicator.vue";
 
 export default {
+  components: {
+    StatusIndicator,
+  },
   props: {
     rows: Number,
     cols: Number,
     ships: Array,
     board: Array,
     shots: Array,
-    yours: Boolean,
 
-    waiting: Boolean
+    state: String,
+    owner: String,
+
+    yours: Boolean,
+    waiting: Boolean,
+    isActive: Boolean,
   },
   computed: {
     ...mapState(["isOver", "opponentLeft", "yourTurn"]),
@@ -46,12 +62,12 @@ export default {
         (this.yours && this.yourTurn)
       );
     },
-    isActive() {
-      return !(this.waiting || this.isOver || this.opponentLeft);
-    },
-    owner() {
-      return this.yours ? 'you' : 'opponent'
-    },
+    // isActive() {
+    //   return !(this.waiting || this.isOver || this.opponentLeft);
+    // },
+    // owner() {
+    //   return this.yours ? 'you' : 'opponent'
+    // },
     status() {
       return ''
     }
@@ -72,3 +88,17 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+@use '@/assets/scss/variables';
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: variables.$gap-sm
+}
+.board-header {
+  display: flex;
+  justify-content: space-between;
+}
+</style>
