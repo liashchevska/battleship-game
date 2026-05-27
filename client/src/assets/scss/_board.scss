@@ -20,7 +20,7 @@ $players: "you", "opponent";
                 border: variables.$button-border solid mixins.theme-based($theme-map, $player);
 
                 &:not(.disabled) {
-                    box-shadow: 0 0 5px mixins.theme-based($theme-map, $player);
+                    // box-shadow: 0 0 5px mixins.theme-based($theme-map, $player);
                 }
             }
 
