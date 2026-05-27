@@ -1,34 +1,15 @@
 <template>
   <div v-if="board" class="board ship-placement">
-    <circles-to-rhombuses-spinner
-      v-if="loading"
-      :animation-duration="2500"
-      :rhombus-size="15"
-      :color="'#38bdf8'"
-    />
+    <circles-to-rhombuses-spinner v-if="loading" :animation-duration="2500" :rhombus-size="15" :color="'#38bdf8'" />
     <table class="board-table">
       <tbody>
         <tr v-for="(_, row) in rows" :key="row">
           <td v-for="(_, col) in cols" :key="col" class="board-cell">
-            <div
-              class="board-cell-content"
-              @drop="onDrop($event, row, col)"
-              @dragenter.prevent
-              @dragover.prevent
-            >
+            <div class="board-cell-content" @drop="onDrop($event, row, col)" @dragenter.prevent @dragover.prevent>
               &nbsp;
-              <div
-                v-if="board[row][col] != -1"
-                :class="[
-                  getShipClassName(
-                    ships[board[row][col]]['length'],
-                    ships[board[row][col]]['orientation']
-                  ),
-                ]"
-                draggable="true"
-                @dragstart="onDragStart($event, board[row][col])"
-                @click="rotate($event, board[row][col])"
-              ></div>
+              <div v-if="board[row][col] !== -1" :class="getCellClass(row, col)" draggable="true"
+                @dragstart="onDragStart($event, board[row][col])" @click="rotate($event, board[row][col])">
+              </div>
             </div>
           </td>
         </tr>
@@ -44,6 +25,7 @@ import { CirclesToRhombusesSpinner } from "epic-spinners";
 
 import {
   getBoard,
+  getCellClass as _getCellClass,
   getClicked,
   getDifference,
   getNewOrientation,
@@ -71,8 +53,8 @@ export default {
   },
   methods: {
     ...mapActions(["randomizeShips"]),
-    getShipClassName(length, orientation) {
-      return `ship-${orientation}-${length}`;
+    getCellClass(row, col) {
+      return _getCellClass(this.board, this.ships, row, col)
     },
     onDragStart(event, shipIndex) {
       event.dataTransfer.dropEffect = "move";

@@ -100,3 +100,13 @@ export function getBoard(rows, cols, ships) {
   }
   return board;
 }
+
+export function getCellClass(board, ships, row, col) {
+  const cell = board[row][col]
+  if (cell === -1) return ''
+
+  const ship = ships[cell]
+  if (!ship) return
+
+  return `ship-${ship.orientation}-${ship.length}`
+}

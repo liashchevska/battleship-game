@@ -22,6 +22,8 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import { getCellClass as _getCellClass } from "../helpers";
+
 export default {
   props: {
     rows: Number,
@@ -65,11 +67,7 @@ export default {
       }
     },
     getCellClass(x, y) {
-      if (this.board[x][y] != -1) {
-        const { length, orientation } = this.ships[this.board[x][y]]
-        return `ship-${orientation}-${length}`
-      }
-      return ''
+      return _getCellClass(this.board, this.ships, x, y)
     }
   }
 };
