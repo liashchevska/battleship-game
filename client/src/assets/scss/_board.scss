@@ -27,11 +27,6 @@ $players: "you", "opponent";
             &.#{$player} .shot-miss {
                 background-color: mixins.theme-based($theme-map, $player);
             }
-
-            tr:nth-of-type(odd) td:nth-of-type(odd),
-            tr:nth-of-type(even) td:nth-of-type(even) {
-                background-color: mixins.theme-based($theme-map, "square");
-            }
         }
     }
 }
@@ -105,6 +100,7 @@ $players: "you", "opponent";
         }
     }
 }
+
 // <---
 
 $orientations: "HR", "VR";

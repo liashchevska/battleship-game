@@ -1,10 +1,10 @@
+$navy-blue: #1a2b3d;
+
 $themes: (
   "dark": ("font": #dbeafe,
-    "page-background": #13202e,
+    "page-background": $navy-blue,
 
-    "board-cell-border": rgba(255, 255, 255, 0.03),
-    "square": #203247,
-
+    "board-cell-border": rgba(255, 255, 255, 0.05),
     "table-border": #0ea5e9,
 
     "player": #4b5563,
