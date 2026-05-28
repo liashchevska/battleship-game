@@ -1,7 +1,7 @@
 <template>
     <div class="status-indicator text-label">
         <span v-if="props.isActive" class="dot"></span>
-        <span>{{ props.text }}</span>
+        <span class="text-state">{{ props.text }}</span>
     </div>
 </template>
 

@@ -2,7 +2,7 @@
   <div v-if="shots" :class="[yours ? 'you' : 'opponent', 'board']">
     <div class="board-header text-muted">
       <span class="text-label"> {{ owner }}</span>
-      <StatusIndicator :isActive="isActive" :text="state"/>
+      <StatusIndicator v-if="isGameActive" :isActive="isActive" :text="state" />
     </div>
 
     <table class="board-table" :class="[owner, isDisabled ? 'disabled' : 'active']">
@@ -32,6 +32,7 @@
 import { mapActions, mapState } from "vuex";
 import { getCellClass as _getCellClass } from "../helpers";
 import StatusIndicator from "./StatusIndicator.vue";
+import { mapGetters } from "vuex/dist/vuex.cjs.js";
 
 export default {
   components: {
@@ -53,6 +54,7 @@ export default {
   },
   computed: {
     ...mapState(["isOver", "opponentLeft", "yourTurn"]),
+    ...mapGetters(["isGameActive"]),
     isDisabled() {
       return (
         this.waiting ||
@@ -62,15 +64,6 @@ export default {
         (this.yours && this.yourTurn)
       );
     },
-    // isActive() {
-    //   return !(this.waiting || this.isOver || this.opponentLeft);
-    // },
-    // owner() {
-    //   return this.yours ? 'you' : 'opponent'
-    // },
-    status() {
-      return ''
-    }
   },
   methods: {
     ...mapActions(["makeMove"]),
@@ -97,6 +90,7 @@ export default {
   flex-direction: column;
   gap: variables.$gap-sm
 }
+
 .board-header {
   display: flex;
   justify-content: space-between;

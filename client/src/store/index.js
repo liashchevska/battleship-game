@@ -37,6 +37,14 @@ export default createStore({
     cols: 10
   },
 
+  getters: {
+    isWaitingForOpponent: state => {
+      return !state.gameStarted && state.shipsPlaced
+    },
+    isGameActive: (state, getters) => {
+      return !(getters.isWaitingForOpponent || state.isOver || state.opponentLeft)
+    }
+  },
   mutations: {
     updateShips: (state, ships) => {
       mutate(state, "ships", ships);
