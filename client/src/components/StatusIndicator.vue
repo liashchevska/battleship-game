@@ -1,6 +1,6 @@
 <template>
     <div class="status-indicator text-label">
-        <span v-if="props.isActive" class="dot"></span>
+        <span v-if="props.displayDot" class="dot"></span>
         <span class="text-state">{{ props.text }}</span>
     </div>
 </template>
@@ -8,7 +8,7 @@
 <script setup>
 const props = defineProps({
     text: String,
-    isActive: Boolean
+    displayDot: Boolean
 })
 </script>
 
@@ -30,7 +30,7 @@ const props = defineProps({
     animation: flicker 1.5s infinite ease-in-out;
 }
 
-$variants: "you", "opponent";
+$variants: "you", "opponent", "win", "lose", "hit";
 
 @each $variant in $variants {
     .#{$variant} .dot {

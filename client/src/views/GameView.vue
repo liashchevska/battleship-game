@@ -19,10 +19,10 @@
       <GameStatus :waiting="!gameStarted && shipsPlaced" />
 
       <div class="boards">
-        <GameBoard :isActive="!yourTurn" owner="you" :state="yourTurn ? 'waiting' : 'their turn'" :rows="rows" :cols="cols" :ships="ships"
+        <GameBoard :displayDot="!yourTurn" owner="you" :state="yourTurn ? 'waiting' : 'their turn'" :rows="rows" :cols="cols" :ships="ships"
           :board="getBoard(rows, cols, ships)" :shots="shots" :yours="true" :waiting="false" />
 
-        <GameBoard :isActive="yourTurn" owner="opponent" :state="yourTurn ? 'your turn' : 'waiting'" :rows="rows" :cols="cols"
+        <GameBoard :displayDot="yourTurn" owner="opponent" :state="yourTurn ? 'your turn' : 'waiting'" :rows="rows" :cols="cols"
           :ships="opponentShips" :board="getBoard(rows, cols, opponentShips)" :shots="opponent" :yours="false"
           :waiting="!gameStarted && shipsPlaced">
           <template #actions>
