@@ -14,6 +14,7 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 @use '@/assets/scss/variables';
+@use '@/assets/scss/mixins';
 
 .status-indicator {
     display: inline-flex;
@@ -26,9 +27,19 @@ const props = defineProps({
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #29d3c2;
     animation: flicker 1.5s infinite ease-in-out;
 }
+
+$variants: "you", "opponent";
+
+@each $variant in $variants {
+    .#{$variant} .dot {
+        @include mixins.themify using ($theme-map) {
+            background-color: mixins.theme-based($theme-map, $variant);
+        }
+    }
+}
+
 
 @keyframes flicker {
     0% {
