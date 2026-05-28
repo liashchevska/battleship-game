@@ -1,7 +1,7 @@
 <template>
     <div class="status-indicator text-label">
         <span v-if="props.displayDot" class="dot"></span>
-        <span class="text-state">{{ props.text }}</span>
+        <span>{{ props.text }}</span>
     </div>
 </template>
 
@@ -15,6 +15,7 @@ const props = defineProps({
 <style lang="scss" scoped>
 @use '@/assets/scss/variables';
 @use '@/assets/scss/mixins';
+@use 'sass:color';
 
 .status-indicator {
     display: inline-flex;
@@ -30,16 +31,24 @@ const props = defineProps({
     animation: flicker 1.5s infinite ease-in-out;
 }
 
-$variants: "you", "opponent", "win", "lose", "hit";
+$variants: "you", "opponent", "won", "lost", "left", "wait";
 
 @each $variant in $variants {
     .#{$variant} .dot {
         @include mixins.themify using ($theme-map) {
-            background-color: mixins.theme-based($theme-map, $variant);
+            $color: mixins.theme-based($theme-map, $variant);
+            background-color: $color;
+
+            @if $variant =='won' {
+                box-shadow: 0 0 10px color.scale($color, $alpha: 60%);
+            }
         }
     }
 }
 
+.won.dot {
+    box-shadow: 0 0 10px rgba(46, 230, 198, 0.6);
+}
 
 @keyframes flicker {
     0% {

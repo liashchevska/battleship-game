@@ -1,17 +1,20 @@
 <template>
   <h2 class="game-status">
     <!-- <span class="text-label"> game status: </span> -->
-    <span class="text-label"> {{ currentStatus }}</span>
+    <StatusIndicator :class="currentStatus.code" :displayDot="true" :text="currentStatus.text" />
     <ThreeDots v-if="this.waiting" />
+    <!-- <span class="text-label"> {{ currentStatus }}</span> -->
   </h2>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import ThreeDots from "./ThreeDots.vue";
+import StatusIndicator from "./StatusIndicator.vue";
 export default {
   components: {
     ThreeDots,
+    StatusIndicator
   },
   props: {
     waiting: Boolean
@@ -23,17 +26,19 @@ export default {
       "youWon",
       "opponentLeft"
     ]),
+    ...mapGetters(['isGameActive']),
     currentStatus() {
       if (this.waiting) {
-        return 'waiting for an opponent'
+        return { text: 'waiting for an opponent', code: 'wait' }
       }
       if (this.isOver) {
-        return `game over | you ${this.youWon ? 'won' : 'lost'}`
+        const result = this.youWon ? 'won' : 'lost'
+        return { text: `game over | you ${result}`, code: result }
       }
       if (this.opponentLeft) {
-        return 'game over | opponent left'
+        return { text: 'game over | opponent left', code: 'left' }
       }
-      return `${this.yourTurn ? 'your' : "opponent's"} turn`
+      return { text: `${this.yourTurn ? 'your' : "opponent's"} turn`, code: 'turn' }
     },
   }
 };

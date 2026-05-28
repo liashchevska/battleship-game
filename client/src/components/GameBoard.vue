@@ -2,7 +2,7 @@
   <div v-if="shots" :class="[yours ? 'you' : 'opponent', 'board']">
     <div class="board-header text-muted">
       <span class="text-label"> {{ owner }}</span>
-      <StatusIndicator v-if="isGameActive" :displayDot="displayDot" :text="state" />
+      <StatusIndicator v-if="isGameActive" :displayDot="displayDot" :text="state" class="text-state" />
     </div>
 
     <table class="board-table" :class="[owner, isDisabled ? 'disabled' : 'active']">
