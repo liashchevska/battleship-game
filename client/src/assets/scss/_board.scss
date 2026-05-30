@@ -96,7 +96,9 @@ $players: "you", "opponent";
     &>.board-table {
         @include mixins.themify using ($theme-map) {
             border: variables.$button-border solid mixins.theme-based($theme-map, "you");
-            border-radius: variables.$button-radius;
+
+            // border: 1px solid mixins.theme-based($theme-map, "you");
+            // box-shadow: 0 0 0 1px rgba(mixins.theme-based($theme-map, "you"), 0.4);
         }
     }
 }

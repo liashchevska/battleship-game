@@ -16,27 +16,25 @@
 }
 
 @mixin base-button {
+    height: 40px;
+    padding: 0 20px;
+    color: inherit;
+    background: transparent;
+    border: 1px solid;
+    border-radius: 5px;
+
+    font-family: inherit;
+    font-size: inherit;
+    text-transform: inherit;
+
+    transition: all 0.2s ease;
+
     &:hover {
         cursor: pointer;
     }
-
-    width: variables.$button-width;
-
-    padding: 12px;
-
-    border-width: variables.$button-border;
-    border-style: solid;
-    border-radius: 4px;
-
-    text-transform: inherit;
-    font-family: inherit;
-    font-size: inherit;
-    color: inherit;
-
-    background-color: transparent;
 }
 
-$ship-border: 2px;
+$ship-border: 1px;
 
 @mixin ship-part-background($key) {
     margin-top: -$ship-border;
@@ -45,6 +43,6 @@ $ship-border: 2px;
     @include themify using ($theme-map) {
         $color: theme-based($theme-map, $key);
         background-color: rgba($color, 0.45);
-        border: $ship-border solid rgba($color, 0.85);
+        border: $ship-border solid rgba($color, 0.95);
     }
 }

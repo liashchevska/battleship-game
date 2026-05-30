@@ -4,8 +4,10 @@
 
     <template v-if="!shipsPlaced">
       <ShipPlacement :rows="rows" :cols="cols" />
-      <OpponentSelect />
-      <button class="btn btn-primary" @click="startGame">start game</button>
+      <div class="actions-panel">
+        <OpponentSelect />
+        <button class="btn btn-primary" @click="startGame">start game</button>
+      </div>
     </template>
 
     <div v-if="friendAsOpponent && shipsPlaced && !gameStarted">
@@ -19,16 +21,18 @@
       <GameStatus :waiting="!gameStarted && shipsPlaced" />
 
       <div class="boards">
-        <GameBoard :displayDot="!yourTurn" owner="you" :state="yourTurn ? 'waiting' : 'their turn'" :rows="rows" :cols="cols" :ships="ships"
-          :board="getBoard(rows, cols, ships)" :shots="shots" :yours="true" :waiting="false" />
-
-        <GameBoard :displayDot="yourTurn" owner="opponent" :state="yourTurn ? 'your turn' : 'waiting'" :rows="rows" :cols="cols"
-          :ships="opponentShips" :board="getBoard(rows, cols, opponentShips)" :shots="opponent" :yours="false"
-          :waiting="!gameStarted && shipsPlaced">
-          <template #actions>
+        <GameBoard :displayDot="!yourTurn" owner="you" :state="yourTurn ? 'waiting' : 'their turn'" :rows="rows"
+          :cols="cols" :ships="ships" :board="getBoard(rows, cols, ships)" :shots="shots" :yours="true"
+          :waiting="false">
+          <!-- <template #actions>
             <button class="btn btn-primary btn-leave" @click="leaveGame"> leave game </button>
-          </template>
+          </template> -->
         </GameBoard>
+
+        <GameBoard :displayDot="yourTurn" owner="opponent" :state="yourTurn ? 'your turn' : 'waiting'" :rows="rows"
+          :cols="cols" :ships="opponentShips" :board="getBoard(rows, cols, opponentShips)" :shots="opponent"
+          :yours="false" :waiting="!gameStarted && shipsPlaced" />
+
       </div>
     </template>
   </div>
@@ -156,5 +160,12 @@ export default {
   flex-direction: column;
   align-items: center;
   gap: variables.$gap-md;
+}
+
+.actions-panel {
+  display: flex;
+  flex-direction: column;
+  gap: variables.$gap-sm;
+
 }
 </style>

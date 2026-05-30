@@ -4,7 +4,6 @@
       <span class="text-label"> {{ owner }}</span>
       <StatusIndicator v-if="isGameActive" :displayDot="displayDot" :text="state" class="text-state" />
     </div>
-
     <table class="board-table" :class="[owner, isDisabled ? 'disabled' : 'active']">
       <tbody>
         <tr v-for="(_, x) in rows" :key="x">
@@ -94,5 +93,15 @@ export default {
 .board-header {
   display: flex;
   justify-content: space-between;
+}
+
+.board-footer {
+  display: flex;
+  justify-content: center;
+
+  & .btn {
+    flex: 0.5;
+  }
+
 }
 </style>

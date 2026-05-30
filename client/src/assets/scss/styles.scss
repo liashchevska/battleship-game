@@ -35,57 +35,77 @@ body {
 
 
 .btn {
+    @extend .text-label;
+    font-size: 12px;
     @include mixins.base-button;
 }
 
 .btn-primary {
     @include mixins.themify using ($theme-map) {
-        $color: mixins.theme-based($theme-map, 'opponent');
+        $accent: mixins.theme-based($theme-map, "accent");
 
-        background-color: rgba($color, 0.85);
-        border-color: rgba($color, 0.85);
-    }
-}
-
-.btn-secondary {
-    @include mixins.themify using ($theme-map) {
-        $color: mixins.theme-based($theme-map, 'opponent');
-
-        background-color: rgba($color, 0.15);
-        border-color: rgba($color, 0.85);
-    }
-}
-
-.btn-primary,
-.btn-secondary {
-    @include mixins.themify using ($theme-map) {
-        $color: mixins.theme-based($theme-map, 'opponent');
+        // box-shadow: 0 0 8px rgba($accent, 0.25);
+        background-color: rgba($accent, 0.9);
+        border-color: rgba($accent, 0.9);
+        color: #0f2233;
 
         &:hover {
-            background-color: $color;
-            border-color: $color;
+            background-color: $accent;
+            border-color: $accent;
+            box-shadow: 0 0 12px rgba($accent, 0.45);
         }
     }
 }
+
+.btn-secondary {
+    @include mixins.themify using ($theme-map) {
+        $accent: mixins.theme-based($theme-map, "accent");
+
+        background-color: transparent;
+        border-color: rgba($accent, 0.5);
+        color: $accent;
+
+        &:hover {
+            border-color: $accent;
+            color: $accent;
+            box-shadow: 0 0 10px rgba($accent, 0.25);
+        }
+    }
+}
+
+// .btn-leave {
+//     padding: 4px 8px;
+
+//     border: 1px solid rgba($cyan, 0.3);
+//     border-radius: 4px;
+
+//     background: transparent;
+
+//     &:hover {
+//         border-color: $cyan;
+//     }
+
+// }
+
 
 .friend-selected {
     width: variables.$button-width !important;
 }
 
 .opponent-select>.btn {
-    border-radius: 0;
+    // border-radius: 0;
     width: variables.$button-width * 0.5;
 }
 
 .opponent-select .btn:first-of-type {
-    border-top-left-radius: variables.$button-radius;
-    border-bottom-left-radius: variables.$button-radius;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     border-right: 0;
 }
 
 .opponent-select .btn:last-of-type {
-    border-top-right-radius: variables.$button-radius;
-    border-bottom-right-radius: variables.$button-radius;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     border-left: 0;
 }
 
@@ -131,7 +151,7 @@ body {
 .text-label {
     font-size: 14px;
     font-weight: 600;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     text-transform: uppercase;
 }
 
