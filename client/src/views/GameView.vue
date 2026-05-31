@@ -136,7 +136,12 @@ export default {
 .game-container {
   display: flex;
   flex-direction: column;
+
   align-items: center;
+  flex: 1;
+  min-height: 0;
+
+  margin: variables.$gap-lg;
 }
 
 .game-view {
