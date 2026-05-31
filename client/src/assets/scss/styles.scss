@@ -2,7 +2,6 @@
 @use "./mixins";
 @use "./board";
 @use "./modal";
-@use "./game";
 
 @import url("https://fonts.googleapis.com/css2?family=Special+Elite&display=swap");
 
@@ -44,7 +43,6 @@ body {
     @include mixins.themify using ($theme-map) {
         $accent: mixins.theme-based($theme-map, "accent");
 
-        // box-shadow: 0 0 8px rgba($accent, 0.25);
         background-color: rgba($accent, 0.9);
         border-color: rgba($accent, 0.9);
         color: #0f2233;
@@ -73,27 +71,18 @@ body {
     }
 }
 
-// .btn-leave {
-//     padding: 4px 8px;
-
-//     border: 1px solid rgba($cyan, 0.3);
-//     border-radius: 4px;
-
-//     background: transparent;
-
-//     &:hover {
-//         border-color: $cyan;
-//     }
-
-// }
-
+.btn-text {
+    &:hover {
+        opacity: 1;
+        cursor: pointer;
+    }
+}
 
 .friend-selected {
     width: variables.$button-width !important;
 }
 
 .opponent-select>.btn {
-    // border-radius: 0;
     width: variables.$button-width * 0.5;
 }
 
