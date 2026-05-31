@@ -24,9 +24,6 @@
         <GameBoard :displayDot="!yourTurn" owner="you" :state="yourTurn ? 'waiting' : 'their turn'" :rows="rows"
           :cols="cols" :ships="ships" :board="getBoard(rows, cols, ships)" :shots="shots" :yours="true"
           :waiting="false">
-          <!-- <template #actions>
-            <button class="btn btn-primary btn-leave" @click="leaveGame"> leave game </button>
-          </template> -->
         </GameBoard>
 
         <GameBoard :displayDot="yourTurn" owner="opponent" :state="yourTurn ? 'your turn' : 'waiting'" :rows="rows"
@@ -89,7 +86,6 @@ export default {
       "gameStarted",
       "gameId",
       "gameIsInvalid"
-      // "link",
     ]),
     link() {
       return document.URL + "join" + this.gameId;
