@@ -14,10 +14,10 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState,mapActions } from "vuex";
 import ThreeDots from "./ThreeDots.vue";
 import StatusIndicator from "./StatusIndicator.vue";
-import { mapActions } from "vuex/dist/vuex.cjs.js";
+
 export default {
   components: {
     ThreeDots,
@@ -25,6 +25,9 @@ export default {
   },
   props: {
     waiting: Boolean
+  },
+  methods: {
+    ...mapActions(['leaveGame']),
   },
   computed: {
     ...mapState([
@@ -34,7 +37,6 @@ export default {
       "opponentLeft"
     ]),
     ...mapGetters(['isGameActive']),
-    ...mapActions(['leaveGame']),
     currentStatus() {
       if (this.waiting) {
         return { text: 'waiting for an opponent', code: 'wait' }
