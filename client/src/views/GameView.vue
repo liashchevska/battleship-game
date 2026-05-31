@@ -2,13 +2,13 @@
   <div class="game-container">
     <GameIsInvalidModal v-if="gameIsInvalid" />
 
-    <template v-if="!shipsPlaced">
+    <div class="lobby-view" v-if="!shipsPlaced">
       <ShipPlacement :rows="rows" :cols="cols" />
       <div class="actions-panel">
         <OpponentSelect />
         <button class="btn btn-primary" @click="startGame">start game</button>
       </div>
-    </template>
+    </div>
 
     <div v-if="friendAsOpponent && shipsPlaced && !gameStarted">
       <div class="link-for-a-friend">
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <template v-if="shipsPlaced">
+    <div class="game-view" v-if="shipsPlaced">
       <GameStatus :waiting="!gameStarted && shipsPlaced" />
 
       <div class="boards">
@@ -31,7 +31,7 @@
           :yours="false" :waiting="!gameStarted && shipsPlaced" />
 
       </div>
-    </template>
+    </div>
   </div>
 </template>
 
@@ -137,6 +137,21 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.game-view {
+  display: flex;
+  flex-direction: column;
+  gap: variables.$gap-md;
+
+  @media (min-width: variables.$boards-breakpoint) {
+    gap: variables.$gap-lg;
+  }
+}
+
+.lobby-view {
+  display: flex;
+  flex-direction: column;
   gap: variables.$gap-sm;
 }
 
@@ -145,9 +160,9 @@ export default {
   flex-direction: column;
   gap: variables.$gap-md;
 
-  // Change min-width
-  @media (min-width: 768px) {
+  @media (min-width: variables.$boards-breakpoint) {
     flex-direction: row;
+    gap: variables.$gap-lg;
   }
 }
 
