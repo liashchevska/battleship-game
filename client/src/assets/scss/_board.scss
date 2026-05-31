@@ -65,20 +65,20 @@ $players: "you", "opponent";
 }
 
 .shot-hit {
-    width: variables.$cell-size;
-    height: variables.$cell-size;
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     z-index: 3;
 
     &:after {
-        position: relative;
-        vertical-align: -50%;
-        color: #fff;
-        font-size: variables.$cell-size + 3px;
         content: "\d7";
-        z-index: 33;
+        font-size: variables.$cell-size + 3px;
+        line-height: 1;
+        transform: translateY(-1px);
 
         @include mixins.themify using ($theme-map) {
             color: mixins.theme-based($theme-map, "hit");
