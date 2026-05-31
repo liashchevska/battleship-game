@@ -7,7 +7,7 @@
     </div>
 
     <!-- <div class="status-right"> -->
-    <span class="text-state btn-text" @click="leaveGame">[leave game]</span>
+    <button class="text-state btn-text" @click="leaveGame">[leave game]</button>
     <!-- </div> -->
     <!-- <span class="text-label"> {{ currentStatus }}</span> -->
   </h2>
