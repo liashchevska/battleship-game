@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div v-if="friendAsOpponent && shipsPlaced && !gameStarted">
+    <div v-if="friendAsOpponent && shipsPlaced && !gameStarted" class="join-link">
       <span class="link-text text-state">send this link to your frined:</span>
       <span @click="copyLink" class="text-label link-itself">{{ link }}</span>
     </div>
@@ -182,6 +182,17 @@ export default {
   display: flex;
   flex-direction: column;
   gap: variables.$gap-sm;
+
+}
+
+.join-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (min-width: variables.$boards-breakpoint) {
+    flex-direction: row;
+  }
 
 }
 
