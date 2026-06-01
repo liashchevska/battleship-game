@@ -11,10 +11,8 @@
     </div>
 
     <div v-if="friendAsOpponent && shipsPlaced && !gameStarted">
-      <div class="link-for-a-friend">
-        send this link to your frined:
-        <span @click="copyLink" class="link-itself">{{ link }}</span>
-      </div>
+      <span class="link-text text-state">send this link to your frined:</span>
+      <span @click="copyLink" class="text-label link-itself">{{ link }}</span>
     </div>
 
     <div class="game-view" v-if="shipsPlaced">
@@ -132,6 +130,7 @@ export default {
 
 <style lang="scss">
 @use '@/assets/scss/variables';
+@use '@/assets/scss/mixins';
 
 .game-container {
   display: flex;
@@ -183,5 +182,18 @@ export default {
   flex-direction: column;
   gap: variables.$gap-sm;
 
+}
+
+.link-itself {
+  opacity: 0.85;
+
+  @include mixins.themify using ($theme-map) {
+    color: mixins.theme-based($theme-map, "opponent");
+  }
+
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
 }
 </style>

@@ -107,15 +107,6 @@ body {
     border-left: 0;
 }
 
-.link-itself {
-    @include mixins.themify using ($theme-map) {
-        color: mixins.theme-based($theme-map, "opponent");
-    }
-
-    &:hover {
-        cursor: pointer;
-    }
-}
 
 .circles-to-rhombuses-spinner {
     position: absolute !important;
