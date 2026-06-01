@@ -1,20 +1,15 @@
 <template>
   <h2 class="game-status">
-    <!-- <span class="text-label"> game status: </span> -->
     <div class="state">
       <StatusIndicator :class="currentStatus.code" :displayDot="!isGameActive" :text="currentStatus.text" />
       <ThreeDots v-if="this.waiting" />
     </div>
-
-    <!-- <div class="status-right"> -->
     <button class="text-state btn-text" @click="leaveGame">[leave game]</button>
-    <!-- </div> -->
-    <!-- <span class="text-label"> {{ currentStatus }}</span> -->
   </h2>
 </template>
 
 <script>
-import { mapGetters, mapState,mapActions } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 import ThreeDots from "./ThreeDots.vue";
 import StatusIndicator from "./StatusIndicator.vue";
 
@@ -61,6 +56,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: variables.$gap-xs;
+  gap: variables.$gap-md;
 }
 </style>

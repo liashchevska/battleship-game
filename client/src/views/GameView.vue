@@ -140,10 +140,11 @@ export default {
   flex: 1;
   min-height: 0;
 
-  margin: variables.$gap-lg;
+  margin: variables.$gap-md;
 }
 
 .game-view {
+  margin-top: variables.$gap-xs;
   display: flex;
   flex-direction: column;
   gap: variables.$gap-md;
