@@ -4,7 +4,7 @@
     <div class="placement-tips">
       <p class="">Placement tips:</p>
       <ul>
-        <li>Drag and drop ships to place them on the grid</li>
+        <li>Drag and drop ships to reposition them on the grid</li>
         <li>Click a ship cell to rotate the ship clockwise around that cell</li>
       </ul>
     </div>
