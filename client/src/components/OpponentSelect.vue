@@ -1,5 +1,6 @@
 <template>
   <div class="opponent-select">
+    <p class="text-label">Opponent type</p>
     <template v-if="gameId == null">
       <button :class="['btn', !friendAsOpponent ? 'btn-primary' : 'btn-secondary']"
         @click="createGameWithRandomOpponent">
@@ -30,3 +31,16 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+@use '@/assets/scss/variables';
+
+.opponent-select {
+  & p {
+    margin-top: variables.$gap-md;
+    margin-bottom: variables.$gap-sm;
+    text-align: center;
+    opacity: 0.8;
+  }
+}
+</style>
