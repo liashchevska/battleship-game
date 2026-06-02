@@ -8,7 +8,7 @@
       <tbody>
         <tr v-for="(_, x) in rows" :key="x">
           <td v-for="(_, y) in cols" :key="y" class="board-cell">
-            <div @click="onCellClick(x, y)" class="board-cell-content">
+            <div @click="onCellClick(x, y)" class="board-cell-content" :class="{ fired: shots[x][y] !== 0 }">
               &nbsp;
               <div :class="{
                 'shot-miss': shots[x][y] == 1,
@@ -83,11 +83,22 @@ export default {
 
 <style lang="scss">
 @use '@/assets/scss/variables';
+@use '@/assets/scss/mixins';
+@use 'sass:color';
 
 .board {
   display: flex;
   flex-direction: column;
   gap: variables.$gap-sm
+}
+
+.opponent.active {
+  & .board-cell-content:not(.fired):hover {
+    @include mixins.themify using ($theme-map) {
+      $initialColor: mixins.theme-based($theme-map, "opponent");
+      background-color: rgba($color: $initialColor, $alpha: 0.25);
+    }
+  }
 }
 
 .board-header {
@@ -102,6 +113,5 @@ export default {
   & .btn {
     flex: 0.5;
   }
-
 }
 </style>
