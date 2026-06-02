@@ -4,6 +4,8 @@
 $players: "you", "opponent";
 
 .board-table {
+    position: relative;
+    
     width: variables.$board-size;
     height: variables.$board-size;
     user-select: none;

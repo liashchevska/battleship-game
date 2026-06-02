@@ -9,8 +9,8 @@
       </ul>
     </div>
 
-    <circles-to-rhombuses-spinner v-if="loading" :animation-duration="2500" :rhombus-size="15" :color="'#38bdf8'" />
     <table class="board-table">
+      <circles-to-rhombuses-spinner v-if="loading" :animation-duration="2500" :rhombus-size="15" :color="'#38bdf8'" />
       <tbody>
         <tr v-for="(_, row) in rows" :key="row">
           <td v-for="(_, col) in cols" :key="col" class="board-cell">

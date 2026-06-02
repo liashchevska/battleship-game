@@ -110,7 +110,7 @@ body {
 
 .circles-to-rhombuses-spinner {
     position: absolute !important;
-    top: calc(50% - #{variables.$margin-size});
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
