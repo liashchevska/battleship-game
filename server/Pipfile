@@ -4,25 +4,26 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pylint = "*"
-autopep8 = "*"
-pytest-django = "*"
-pytest-cov = "*"
+pylint = "==2.7.4"
+autopep8 = "==1.5.6"
+pytest = "==6.2.3"
+pytest-cov = "==2.11.1"
+pytest-django = "==4.2.0"
 
 [packages]
-django = "*"
-numpy = "*"
-scipy = "*"
-django-picklefield = "*"
-djangorestframework = "*"
-channels = "*"
-channels-redis = "*"
-twisted = {extras = ["http2", "tls"], version = "*"}
-daphne = "*"
-mysqlclient = "*"
-django-cors-headers = "*"
-dj-database-url = "*"
-psycopg2 = "*"
+django = "==3.2"
+numpy = "==1.20.2"
+scipy = "==1.6.2"
+django-picklefield = "==3.0.1"
+djangorestframework = "==3.12.4"
+channels = "==3.0.3"
+channels-redis = "==3.2.0"
+twisted = {extras = ["http2", "tls"], version = "==21.2.0"}
+daphne = "==3.0.2"
+mysqlclient = "==2.0.3"
+django-cors-headers = "==3.7.0"
+dj-database-url = "==0.5.0"
+psycopg2 = "==2.8.6"
 
 [requires]
 python_version = "3.8"
