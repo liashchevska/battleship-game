@@ -117,4 +117,4 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def game_leave(self, event):
         await self.send_json({'action': event['type']})
-        self.leave()
+        await self.leave()
