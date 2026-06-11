@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -89,29 +88,31 @@ WSGI_APPLICATION = 'server.wsgi.application'
 ASGI_APPLICATION = 'server.asgi.application'
 
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [
+                (os.getenv("REDIS_HOST", "redis"), int(os.getenv("REDIS_PORT", 6379)))
+            ],
         },
     },
 }
 
 # Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+if not os.getenv("POSTGRES_DB"):
+    raise ValueError("POSTGRES_DB must be set")
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'battleship_db',
-        'USER': 'battleship_user',
-        'PASSWORD': 'battleship',
-        'HOST': 'localhost',
-        'PORT': ''
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "HOST": os.getenv("DATABASE_HOST", "db"),
+        "PORT": os.getenv("DATABASE_PORT", "5432"),
     }
 }
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
