@@ -30,7 +30,10 @@ export default createStore({
   state: {
     ...initialState,
 
-    socket: new WebSocket(import.meta.env.VITE_WEBSOCKET_URL),
+    socket: new WebSocket(
+      `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/`
+    ),
+
     handler: null,
 
     rows: 10,
@@ -135,9 +138,7 @@ export default createStore({
 
     async randomizeShips({ state, commit }) {
       commit("setLoading", true);
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}random-board/?rows=${state.rows}&cols=${state.cols}`
-      );
+      const response = await axios.get(`/random-board/?rows=${state.rows}&cols=${state.cols}`);
       commit("updateShips", response.data);
       commit("setLoading", false);
     },

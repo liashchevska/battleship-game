@@ -5,11 +5,6 @@ COPY client/package*.json ./
 RUN npm install
 
 COPY client ./
-ARG VITE_WEBSOCKET_URL
-ENV VITE_WEBSOCKET_URL=$VITE_WEBSOCKET_URL
-
-ARG VITE_API_URL
-ENV VITE_API_URL=$VITE_API_URL
 
 RUN npm run build
 
