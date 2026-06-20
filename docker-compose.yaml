@@ -27,12 +27,20 @@ services:
       dockerfile: nginx/Dockerfile
     depends_on:
       - django
-    ports:
-      - "80:80"
+    expose:
+      - "80"
     env_file:
     - .env
-
+    networks:
+      default:
+      proxy_network:
+        aliases:
+          - battleship-nginx
 
 
 volumes:
   db-data:
+
+networks:
+  proxy_network:
+    external: true
