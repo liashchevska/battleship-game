@@ -11,5 +11,17 @@ export default defineConfig({
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
         }
+    },
+    server: {
+        proxy: {
+            '/random-board': {
+                target: 'http://server:8000',
+                changeOrigin: true
+            },
+            '/ws': {
+                target: 'ws://server:8000',
+                ws: true
+            }
+        }
     }
 })
