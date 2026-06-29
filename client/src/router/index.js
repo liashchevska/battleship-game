@@ -13,6 +13,10 @@ const router = createRouter({
       path: "/join:id?",
       name: "joinGame",
       component: GameView
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: "/"
     }
   ]
 })
