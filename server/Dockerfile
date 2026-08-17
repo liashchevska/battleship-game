@@ -9,7 +9,9 @@ WORKDIR /app
 
 COPY Pipfile Pipfile.lock ./
 
-RUN pipenv install --system --deploy
+ARG DEV_DEP=""
+
+RUN pipenv install --system --deploy $DEV_DEP
 
 
 FROM python:3.11-slim

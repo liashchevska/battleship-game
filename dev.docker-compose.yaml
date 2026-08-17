@@ -7,7 +7,11 @@ services:
       - .env
 
   server:
-    build: ./server
+    build: 
+      context: ./server
+      args:
+        DEV_DEP: "--dev"
+    user: "${UID}:${GID}" 
     volumes:
       - ./server:/app
     working_dir: /app
