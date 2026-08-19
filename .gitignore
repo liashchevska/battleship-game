@@ -44,3 +44,5 @@ webpack-stats.json
 # Environment / configuration
 .env*
 !.env.template
+
+.mypy_cache/
