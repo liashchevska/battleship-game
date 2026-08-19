@@ -6,8 +6,8 @@ from django.forms.models import model_to_dict
 
 @pytest.fixture
 def player_factory(db):
-    def create_player(channel):
-        return Player.create(channel)
+    def create_player(channel, is_human=True):
+        return Player.create(channel_name=channel, is_human=is_human)
     return create_player
 
 
@@ -247,10 +247,18 @@ def playerC(db, player_factory):
     return player_factory(channel='c')
 
 
+@pytest.fixture
+def playerComputer(player_factory):
+    return player_factory(None, False)
+
+
 def test_player_get_random_available_player(db, playerA, playerB):
     assert Player.get_random_available_player(playerA).id is playerB.id
     assert Player.get_random_available_player(playerB).id is playerA.id
     playerB.set_busy()
+    assert Player.get_random_available_player(playerA) is None
+
+def test_get_random_available_player_ignores_computer(playerA, playerComputer):
     assert Player.get_random_available_player(playerA) is None
 
 

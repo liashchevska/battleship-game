@@ -18,8 +18,9 @@ def delete_if_exists(model, attribute, value):
 
 
 class Player(models.Model):
-    channel_name = models.CharField(max_length=125)
+    channel_name = models.CharField(max_length=125, null=True)
     is_busy = models.BooleanField(default=False)
+    is_human = models.BooleanField(default=True)
 
     def leave_game(self, game_id=None):
         self.set_busy(False)
@@ -27,8 +28,9 @@ class Player(models.Model):
         delete_if_exists(Game, 'id', game_id)
 
     @staticmethod
-    def create(channel_name):
-        return Player.objects.create(channel_name=channel_name)
+    def create(*, channel_name, is_human=True):
+        return Player.objects.create(channel_name=channel_name, is_human=is_human)
+
 
     @staticmethod
     def update_players_statuses(*players):
@@ -36,7 +38,7 @@ class Player(models.Model):
 
     @staticmethod
     def get_random_available_player(player):
-        available = Player.objects.filter(is_busy=False, board__isnull=False).exclude(id=player.id)
+        available = Player.objects.filter(is_human=True, is_busy=False, board__isnull=False).exclude(id=player.id)
         if available.count() == 0:
             return None
         else:
@@ -227,7 +229,7 @@ class Game(models.Model):
         self.current = self.playerA if self.current != self.playerA else self.playerB
         self.save(force_update=True)
 
-# x, y boundaries
+    # x, y boundaries
     def shoot(self, player, x, y):
         opponent = self.playerA if self.current == self.playerB else self.playerB
         if player != self.current or opponent.board.is_already_shot(x, y):
@@ -239,7 +241,7 @@ class Game(models.Model):
             self.save(update_fields=['is_over', 'winner'])
         else:
             self.next_player()
-#         return hit
+        return hit
 
 
 class Ship(models.Model):
