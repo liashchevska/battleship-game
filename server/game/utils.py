@@ -10,19 +10,6 @@ def get_game_and_player(game_id, player_id):
 
 
 @database_sync_to_async
-def can_game_be_joined(game_id):
-    temp = Game.objects.filter(id=game_id)
-    if temp.count() != 0:
-        return True
-    return False
-
-
-@database_sync_to_async
-def create_player(channel_name):
-    return Player.objects.create(channel_name=channel_name)
-
-
-@database_sync_to_async
 def place_ships(player, ships, rows=10, cols=10):
     return player.create_board_and_place_ships(ships, rows, cols)
 
@@ -60,11 +47,6 @@ def get_random_opponent(player_id):
 def shoot_at(x, y, game_id, player_id):
     game, player = get_game_and_player(game_id, player_id)
     game.shoot(player, x, y)
-
-
-@database_sync_to_async
-def delete_player(player_id):
-    Player.objects.get(id=player_id).delete()
 
 
 @database_sync_to_async

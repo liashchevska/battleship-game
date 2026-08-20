@@ -1,8 +1,15 @@
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from game.utils import can_game_be_joined, create_player, place_ships,\
-    create_new_game, add_player_to_game, get_game_data, get_player_data,\
-    get_random_opponent, shoot_at, delete_player, leave_game
-
+from game.utils import (
+    place_ships,
+    create_new_game,
+    add_player_to_game,
+    get_game_data,
+    get_player_data,
+    get_random_opponent,
+    shoot_at,
+    leave_game,
+)
+from game.models import Player, Game
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
     def update_game_info(self, game_id):
@@ -10,7 +17,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         self.game_group = None if game_id is None else "Game_{}".format(game_id)
 
     async def connect(self):
-        self.player = await create_player(self.channel_name)
+        self.player = await Player.objects.acreate(channel_name=self.channel_name)
         self.player_id = self.player.id
         self.update_game_info(None)
         await self.accept()
@@ -18,7 +25,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     async def disconnect(self, close_code):
         if self.game_id is not None:
             await self.leave()
-        await delete_player(self.player_id)
+        await Player.objects.filter(id=self.player_id).adelete()
 
     async def add_players_to_game_group(self, *players):
         for player in players:
@@ -37,7 +44,8 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.leave()
 
     async def start(self, ships, friend_as_opponent, game_to_join_id):
-        if game_to_join_id is not None and not await can_game_be_joined(game_to_join_id):
+        can_be_joined = await Game.objects.filter(id=game_to_join_id).aexists()
+        if game_to_join_id is not None and not can_be_joined:
             await self.send_json({'type': 'game.invalid'})
             return
         await place_ships(self.player, ships)
@@ -65,7 +73,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 'game_id': self.game_id,
             })
 
-    async def game_with_a_random_opponent(self):
+    async def game_with_a_random_opponent(self):        
         opponent = await get_random_opponent(self.player_id)
         if opponent is None:
             await self.game_wait({'type': 'game.wait',
