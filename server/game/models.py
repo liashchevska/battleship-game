@@ -7,7 +7,7 @@ from scipy import signal
 import numpy as np
 from django.db.models.aggregates import Count
 from django.db.models.query import Prefetch
-
+from django.utils import timezone
 
 def delete_if_exists(model, attribute, value):
     queryset = model.objects.filter(**{attribute: value})
@@ -21,9 +21,10 @@ class Player(models.Model):
     channel_name = models.CharField(max_length=125, null=True)
     is_busy = models.BooleanField(default=False)
     is_human = models.BooleanField(default=True)
+    available_since = models.DateTimeField(null=True)
 
     def leave_game(self, game_id=None):
-        self.set_busy(False)
+        self.set_busy_status(False)
         delete_if_exists(Board, 'player', self)
         delete_if_exists(Game, 'id', game_id)
 
@@ -45,9 +46,10 @@ class Player(models.Model):
             index = np.random.randint(0, available.count())
             return available[index]
 
-    def set_busy(self, is_busy=True):
+    def set_busy_status(self, is_busy=True):
         self.is_busy = is_busy
-        self.save(update_fields=['is_busy'])
+        self.available_since = None if is_busy else timezone.now()
+        self.save(update_fields=['is_busy', 'available_since'])
 
     def create_board_and_place_ships(self, ships, rows, cols):
         board = Board.create(self, rows, cols)

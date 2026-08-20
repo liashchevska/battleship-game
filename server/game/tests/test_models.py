@@ -255,7 +255,7 @@ def playerComputer(player_factory):
 def test_player_get_random_available_player(db, playerA, playerB):
     assert Player.get_random_available_player(playerA).id is playerB.id
     assert Player.get_random_available_player(playerB).id is playerA.id
-    playerB.set_busy()
+    playerB.set_busy_status()
     assert Player.get_random_available_player(playerA) is None
 
 def test_get_random_available_player_ignores_computer(playerA, playerComputer):
