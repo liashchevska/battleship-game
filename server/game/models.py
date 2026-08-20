@@ -38,7 +38,7 @@ class Player(models.Model):
         Player.objects.filter(pk__in=players).update(is_busy=True)
 
     @staticmethod
-    def get_random_available_player(player_id: int) -> Player | None:
+    def get_available_opponent(player_id: int) -> Player | None:
         return (
             Player.objects.filter(is_human=True, is_busy=False, board__isnull=False)
             .exclude(id=player_id)

@@ -38,8 +38,8 @@ def get_player_data(player_id):
 
 
 @database_sync_to_async
-def get_random_opponent(player_id):
-    return Player.get_random_available_player(player_id)
+def get_available_opponent(player_id):
+    return Player.get_available_opponent(player_id)
 
 
 @database_sync_to_async

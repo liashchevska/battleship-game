@@ -5,7 +5,7 @@ from game.utils import (
     add_player_to_game,
     get_game_data,
     get_player_data,
-    get_random_opponent,
+    get_available_opponent,
     shoot_at,
     leave_game,
 )
@@ -74,7 +74,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             })
 
     async def game_with_a_random_opponent(self):        
-        opponent = await get_random_opponent(self.player_id)
+        opponent = await get_available_opponent(self.player_id)
         if opponent is None:
             await self.game_wait({'type': 'game.wait',
                                   'game_id': None})
