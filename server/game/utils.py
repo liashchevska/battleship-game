@@ -39,8 +39,7 @@ def get_player_data(player_id):
 
 @database_sync_to_async
 def get_random_opponent(player_id):
-    player = Player.objects.get(id=player_id)
-    return Player.get_random_available_player(player.id)
+    return Player.get_random_available_player(player_id)
 
 
 @database_sync_to_async
