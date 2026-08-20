@@ -1,3 +1,4 @@
+from __future__ import annotations
 from django.core.validators import MinValueValidator, MaxValueValidator
 from picklefield.fields import PickledObjectField
 from django.forms.models import model_to_dict
@@ -32,19 +33,18 @@ class Player(models.Model):
     def create(*, channel_name, is_human=True):
         return Player.objects.create(channel_name=channel_name, is_human=is_human)
 
-
     @staticmethod
     def update_players_statuses(*players):
         Player.objects.filter(pk__in=players).update(is_busy=True)
 
     @staticmethod
-    def get_random_available_player(player):
-        available = Player.objects.filter(is_human=True, is_busy=False, board__isnull=False).exclude(id=player.id)
-        if available.count() == 0:
-            return None
-        else:
-            index = np.random.randint(0, available.count())
-            return available[index]
+    def get_random_available_player(player_id: int) -> Player | None:
+        return (
+            Player.objects.filter(is_human=True, is_busy=False, board__isnull=False)
+            .exclude(id=player_id)
+            .order_by("available_since")
+            .first()
+        )
 
     def set_busy_status(self, is_busy=True):
         self.is_busy = is_busy

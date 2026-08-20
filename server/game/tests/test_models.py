@@ -253,13 +253,13 @@ def playerComputer(player_factory):
 
 
 def test_player_get_random_available_player(db, playerA, playerB):
-    assert Player.get_random_available_player(playerA).id is playerB.id
-    assert Player.get_random_available_player(playerB).id is playerA.id
+    assert Player.get_random_available_player(playerA.id).id is playerB.id
+    assert Player.get_random_available_player(playerB.id).id is playerA.id
     playerB.set_busy_status()
-    assert Player.get_random_available_player(playerA) is None
+    assert Player.get_random_available_player(playerA.id) is None
 
 def test_get_random_available_player_ignores_computer(playerA, playerComputer):
-    assert Player.get_random_available_player(playerA) is None
+    assert Player.get_random_available_player(playerA.id) is None
 
 
 def test_player_create_board_and_place_ships(db, playerC):
