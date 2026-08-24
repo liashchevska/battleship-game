@@ -11,7 +11,7 @@ from game.utils import (
     leave_game,
 )
 from game.models import Player, Game
-
+from game.services import create_game_with_random_opponent
 class GameConsumer(AsyncJsonWebsocketConsumer):
     def update_game_info(self, game_id):
         self.game_id = game_id
@@ -78,20 +78,24 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 'game_id': self.game_id,
             })
 
-    async def game_with_a_random_opponent(self):        
-        opponent = await get_available_opponent(self.player_id)
+    async def game_with_a_random_opponent(self):
+        opponent, game = await create_game_with_random_opponent(self.player_id)
+
         if opponent is None:
-            await self.game_wait({'type': 'game.wait',
-                                  'game_id': None})
-            return
-        game = await create_new_game(self.player_id, opponent.id)
-        self.update_game_info(game.id)
-        await self.add_players_to_game_group(self.player, opponent)
-        await self.channel_layer.group_send(self.game_group, {
-            'type': 'game.update',
-            'action': 'game.start',
-            'game_id': self.game_id
-        })
+            await self.game_wait({"type": "game.wait", "game_id": None})
+
+        else:
+            self.update_game_info(game.id)
+            await self.add_players_to_game_group(self.player, opponent)
+            await self.channel_layer.group_send(
+                self.game_group,
+                {
+                    "type": "game.update",
+                    "action": "game.start",
+                    "game_id": self.game_id,
+                },
+            )
+
 
     async def shoot(self, x, y):
         await shoot_at(x, y, self.game_id, self.player_id)
@@ -120,7 +124,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         data = await get_game_data(event['game_id'], self.player_id)
         await self.send_json({'action': event['action'],
                               'game': data})
-
 
     async def game_wait(self, event):
         data = await get_player_data(self.player_id)
