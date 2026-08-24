@@ -1,4 +1,5 @@
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
+from django.db.models import Q
 from game.utils import (
     place_ships,
     create_new_game,
@@ -44,7 +45,11 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.leave()
 
     async def start(self, ships, friend_as_opponent, game_to_join_id):
-        can_be_joined = await Game.objects.filter(id=game_to_join_id).aexists()
+        can_be_joined = await Game.objects.filter(
+            Q(id=game_to_join_id),
+            Q(playerA__isnull=True) | Q(playerB__isnull=True),
+        ).aexists()
+        
         if game_to_join_id is not None and not can_be_joined:
             await self.send_json({'type': 'game.invalid'})
             return
