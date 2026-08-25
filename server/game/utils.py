@@ -71,3 +71,6 @@ def delete_player(player_id):
     Player.objects.get(id=player_id).delete()
 
 
+@database_sync_to_async
+def get_game(game_id):
+    return Game.objects.get(id=game_id)
