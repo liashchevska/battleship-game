@@ -1,6 +1,7 @@
 from game.models import Game, Player
 from channels.db import database_sync_to_async
 from game.serializers import GameSerializer, YouSerializer
+from django.db.models import Q
 
 
 def get_game_and_player(game_id, player_id):
@@ -51,3 +52,22 @@ def shoot_at(x, y, game_id, player_id):
 @database_sync_to_async
 def leave_game(player_id, game_id=None):
     Player.objects.get(id=player_id).leave_game(game_id)
+
+
+@database_sync_to_async
+def can_game_be_joined(game_id):
+    return Game.objects.filter(
+        Q(id=game_id), Q(playerA__isnull=True) | Q(playerB__isnull=True)
+    ).exists()
+
+
+@database_sync_to_async
+def create_player(channel_name):
+    return Player.objects.create(channel_name=channel_name)
+
+
+@database_sync_to_async
+def delete_player(player_id):
+    Player.objects.get(id=player_id).delete()
+
+

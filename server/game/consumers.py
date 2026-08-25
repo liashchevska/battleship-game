@@ -1,5 +1,4 @@
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from django.db.models import Q
 from game.utils import (
     place_ships,
     create_new_game,
@@ -9,7 +8,12 @@ from game.utils import (
     get_available_opponent,
     shoot_at,
     leave_game,
+    can_game_be_joined, 
+    delete_player,
+    create_player
 )
+from django.db.models import Q
+
 from game.models import Player, Game
 from game.services import create_game_with_random_opponent
 class GameConsumer(AsyncJsonWebsocketConsumer):
@@ -18,7 +22,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         self.game_group = None if game_id is None else "Game_{}".format(game_id)
 
     async def connect(self):
-        self.player = await Player.objects.acreate(channel_name=self.channel_name)
+        self.player = await create_player(self.channel_name)        
         self.player_id = self.player.id
         self.update_game_info(None)
         await self.accept()
@@ -26,7 +30,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     async def disconnect(self, close_code):
         if self.game_id is not None:
             await self.leave()
-        await Player.objects.filter(id=self.player_id).adelete()
+        await delete_player(self.player_id)
 
     async def add_players_to_game_group(self, *players):
         for player in players:
@@ -45,12 +49,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.leave()
 
     async def start(self, ships, friend_as_opponent, game_to_join_id):
-        can_be_joined = await Game.objects.filter(
-            Q(id=game_to_join_id),
-            Q(playerA__isnull=True) | Q(playerB__isnull=True),
-        ).aexists()
-        
-        if game_to_join_id is not None and not can_be_joined:
+        if game_to_join_id is not None and not await can_game_be_joined(game_to_join_id):
             await self.send_json({'type': 'game.invalid'})
             return
         await place_ships(self.player, ships)
