@@ -1,21 +1,19 @@
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
+from game.services import (
+    create_game_with_random_opponent,
+    create_or_join_game_with_friend_opponent,
+)
 from game.utils import (
     place_ships,
-    create_new_game,
-    add_player_to_game,
     get_game_data,
     get_player_data,
-    get_available_opponent,
     shoot_at,
     leave_game,
-    can_game_be_joined, 
+    can_game_be_joined,
     delete_player,
-    create_player
+    create_player,
 )
-from django.db.models import Q
 
-from game.models import Player, Game
-from game.services import create_game_with_random_opponent
 class GameConsumer(AsyncJsonWebsocketConsumer):
     def update_game_info(self, game_id):
         self.game_id = game_id
@@ -59,23 +57,27 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.game_with_a_random_opponent()
 
     async def game_with_a_friend_opponent(self, game_to_join_id):
+        game = await create_or_join_game_with_friend_opponent(self.player_id, game_to_join_id) #fmt: skip
+        self.update_game_info(game.id)
+        await self.add_players_to_game_group(self.player)
+
         if game_to_join_id is None:
-            game = await create_new_game(self.player_id)
-            self.update_game_info(game.id)
-            await self.add_players_to_game_group(self.player)
-            await self.channel_layer.group_send(self.game_group, {
-                'type': 'game.wait',
-                'game_id': self.game_id
-            })
+            await self.channel_layer.group_send(
+                self.game_group, 
+                {
+                    "type": "game.wait", 
+                    "game_id": self.game_id
+                }
+            )
         else:
-            self.update_game_info(game_to_join_id)
-            await add_player_to_game(self.game_id, self.player_id)
-            await self.add_players_to_game_group(self.player)
-            await self.channel_layer.group_send(self.game_group, {
-                'type': 'game.update',
-                'action': 'game.start',
-                'game_id': self.game_id,
-            })
+            await self.channel_layer.group_send(
+                self.game_group,
+                {
+                    "type": "game.update",
+                    "action": "game.start",
+                    "game_id": self.game_id,
+                },
+            )
 
     async def game_with_a_random_opponent(self):
         opponent, game = await create_game_with_random_opponent(self.player_id)
@@ -94,7 +96,6 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                     "game_id": self.game_id,
                 },
             )
-
 
     async def shoot(self, x, y):
         await shoot_at(x, y, self.game_id, self.player_id)

@@ -1,5 +1,11 @@
 import pytest
-from game.services import create_game_with_random_opponent
+from game.services import (
+    create_game_with_random_opponent,
+    create_or_join_game_with_friend_opponent,
+)
+from game.utils import create_new_game
+
+# from game.models import Game
 
 
 @pytest.mark.django_db(transaction=True)
@@ -19,3 +25,20 @@ async def test_create_game_with_random_opponent_no_user_available(playerA):
 
     assert opponent == None
     assert game == None
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.asyncio
+async def test_create_or_join_game_with_friend_opponent_creates_game(playerA):
+    game = await create_or_join_game_with_friend_opponent(playerA.id, None)
+
+    assert game is not None
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.asyncio
+async def test_create_or_join_game_with_friend_opponent_joins_game(playerA, playerB):
+    game = await create_new_game(playerA.id)
+    result = await create_or_join_game_with_friend_opponent(playerB.id, game.id)
+
+    assert result.id == game.id
