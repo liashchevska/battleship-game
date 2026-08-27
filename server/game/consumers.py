@@ -13,6 +13,21 @@ from game.utils import (
     delete_player,
     create_player,
 )
+from enum import StrEnum
+
+
+class EventType(StrEnum):
+    START = "game.start"
+    WAIT = "game.wait"
+    UPDATE = "game.update"
+    INVALID = "game.invalid"
+
+
+class ActionType(StrEnum):
+    START = "start"
+    SHOOT = "shoot"
+    LEAVE = "leave"
+
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
     @property
@@ -36,19 +51,19 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def receive_json(self, content, **kwargs):
         action = content.get('action', None)
-        if action == 'start':
+        if action == ActionType.START: 
             await self.start(content['ships'],
                              content['friend_as_opponent'],
                              content['game_to_join_id'])
-        elif action == 'shoot':
+        elif action == ActionType.SHOOT:
             await self.shoot(content['x'],
                              content['y'])
-        elif action == 'leave':
+        elif action == ActionType.LEAVE:
             await self.leave()
 
     async def start(self, ships, friend_as_opponent, game_to_join_id):
         if game_to_join_id is not None and not await can_game_be_joined(game_to_join_id):
-            await self.send_json({'type': 'game.invalid'})
+            await self.send_json({'type': EventType.INVALID})
             return
         await place_ships(self.player, ships)
         if friend_as_opponent:
@@ -62,25 +77,24 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         await self.add_players_to_game_group(self.player)
 
         if game_to_join_id is None:
-            await self.broadcast(type="game.wait", game_id=self.game_id)        
+            await self.broadcast(type=EventType.WAIT, game_id=self.game_id)        
         else:
-            await self.broadcast(type="game.update", action="game.start", game_id=self.game_id)        
+            await self.broadcast(type=EventType.UPDATE, action=EventType.START, game_id=self.game_id)        
 
     async def game_with_a_random_opponent(self):
         opponent, game = await create_game_with_random_opponent(self.player_id)
 
         if opponent is None:
-            await self.game_wait({"type": "game.wait", "game_id": None})
+            await self.game_wait({"type": EventType.WAIT, "game_id": None})
 
         else:
             self.game_id = game.id
             await self.add_players_to_game_group(self.player, opponent)
-            await self.broadcast(type="game.update", action="game.start", game_id=self.game_id)        
+            await self.broadcast(type=EventType.UPDATE, action=EventType.START, game_id=self.game_id)        
 
     async def shoot(self, x, y):
         await shoot_at(x, y, self.game_id, self.player_id)
-        await self.broadcast(type="game.update", action="game.update", game_id=self.game_id)        
-
+        await self.broadcast(type=EventType.UPDATE, action=EventType.UPDATE, game_id=self.game_id)        
 
     async def leave(self):
         if self.game_id is not None:
@@ -94,7 +108,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         self.game_id = None
 
     async def game_update(self, event):
-        if event['action'] == 'game.start':
+        if event['action'] == EventType.START:
             self.game_id = event['game_id']
 
         data = await get_game_data(event['game_id'], self.player_id)
