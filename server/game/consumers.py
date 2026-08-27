@@ -15,14 +15,14 @@ from game.utils import (
 )
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
-    def update_game_info(self, game_id):
-        self.game_id = game_id
-        self.game_group = None if game_id is None else "Game_{}".format(game_id)
-
+    @property
+    def game_group(self):
+        return None if self.game_id is None else f'Game_{self.game_id}'
+    
     async def connect(self):
         self.player = await create_player(self.channel_name)        
         self.player_id = self.player.id
-        self.update_game_info(None)
+        self.game_id = None
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -58,7 +58,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def game_with_a_friend_opponent(self, game_to_join_id):
         game = await create_or_join_game_with_friend_opponent(self.player_id, game_to_join_id) #fmt: skip
-        self.update_game_info(game.id)
+        self.game_id = game.id
         await self.add_players_to_game_group(self.player)
 
         if game_to_join_id is None:
@@ -86,7 +86,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.game_wait({"type": "game.wait", "game_id": None})
 
         else:
-            self.update_game_info(game.id)
+            self.game_id = game.id
             await self.add_players_to_game_group(self.player, opponent)
             await self.channel_layer.group_send(
                 self.game_group,
@@ -115,11 +115,11 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 'type': 'game.leave'
             })
         await leave_game(self.player_id, self.game_id)
-        self.update_game_info(None)
+        self.game_id = None
 
     async def game_update(self, event):
         if event['action'] == 'game.start':
-            self.update_game_info(event['game_id'])
+            self.game_id = event['game_id']
 
         data = await get_game_data(event['game_id'], self.player_id)
         await self.send_json({'action': event['action'],
