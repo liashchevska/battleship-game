@@ -18,7 +18,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     @property
     def game_group(self):
         return None if self.game_id is None else f'Game_{self.game_id}'
-    
+
     async def connect(self):
         self.player = await create_player(self.channel_name)        
         self.player_id = self.player.id
@@ -62,22 +62,9 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         await self.add_players_to_game_group(self.player)
 
         if game_to_join_id is None:
-            await self.channel_layer.group_send(
-                self.game_group, 
-                {
-                    "type": "game.wait", 
-                    "game_id": self.game_id
-                }
-            )
+            await self.broadcast(type="game.wait", game_id=self.game_id)        
         else:
-            await self.channel_layer.group_send(
-                self.game_group,
-                {
-                    "type": "game.update",
-                    "action": "game.start",
-                    "game_id": self.game_id,
-                },
-            )
+            await self.broadcast(type="game.update", action="game.start", game_id=self.game_id)        
 
     async def game_with_a_random_opponent(self):
         opponent, game = await create_game_with_random_opponent(self.player_id)
@@ -88,22 +75,12 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         else:
             self.game_id = game.id
             await self.add_players_to_game_group(self.player, opponent)
-            await self.channel_layer.group_send(
-                self.game_group,
-                {
-                    "type": "game.update",
-                    "action": "game.start",
-                    "game_id": self.game_id,
-                },
-            )
+            await self.broadcast(type="game.update", action="game.start", game_id=self.game_id)        
 
     async def shoot(self, x, y):
         await shoot_at(x, y, self.game_id, self.player_id)
-        await self.channel_layer.group_send(self.game_group, {
-            'type': 'game.update',
-            'action': 'game.update',
-            'game_id': self.game_id
-        })
+        await self.broadcast(type="game.update", action="game.update", game_id=self.game_id)        
+
 
     async def leave(self):
         if self.game_id is not None:
@@ -111,9 +88,8 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 self.game_group,
                 self.channel_name,
             )
-            await self.channel_layer.group_send(self.game_group, {
-                'type': 'game.leave'
-            })
+            await self.broadcast(type="game.leave")
+
         await leave_game(self.player_id, self.game_id)
         self.game_id = None
 
@@ -134,3 +110,8 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     async def game_leave(self, event):
         await self.send_json({'action': event['type']})
         await self.leave()
+
+    async def broadcast(self, *, type, action=None, **data):
+        await self.channel_layer.group_send(
+            self.game_group, {"type": type, "action": action, **data}
+        )
