@@ -148,7 +148,7 @@ export default createStore({
         action: "start",
         ships: state.ships,
         game_to_join_id: state.gameId,
-        friend_as_opponent: state.friendAsOpponent
+        opponent_type:  state.friendAsOpponent ? "friend": "random",
       };
       dispatch("sendSocketMessage", payload);
     },
