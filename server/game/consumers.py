@@ -91,12 +91,13 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.send_json({"type": EventType.INVALID})
             return
         await place_ships(self.player, ships)
+        
         if opponent_type == OpponentType.FRIEND:
-            await self.game_with_a_friend_opponent(game_to_join_id)
+            await self.start_friend_game(game_to_join_id)
         else:
-            await self.game_with_a_random_opponent()
+            await self.start_random_game()
 
-    async def game_with_a_friend_opponent(self, game_to_join_id):
+    async def start_friend_game(self, game_to_join_id):
         game = await create_or_join_game_with_friend_opponent(self.player.id, game_to_join_id) #fmt: skip
         self.game_id = game.id
         await self.add_players_to_game_group(self.player)
@@ -108,7 +109,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 type=EventType.UPDATE, action=EventType.START, game_id=self.game_id
             )
 
-    async def game_with_a_random_opponent(self):
+    async def start_random_game(self):
         opponent, game = await create_game_with_random_opponent(self.player.id)
 
         if opponent is None:
