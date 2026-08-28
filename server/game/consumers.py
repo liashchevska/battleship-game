@@ -38,14 +38,14 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         self.player = await create_player(self.channel_name)
-        self.player_id = self.player.id
+        
         self.game_id = None
         await self.accept()
 
     async def disconnect(self, close_code):
         if self.game_id is not None:
             await self.leave()
-        await delete_player(self.player_id)
+        await delete_player(self.player.id)
 
     async def broadcast_to_group(self, *, type, action=None, **data):
         await self.channel_layer.group_send(
@@ -85,7 +85,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.game_with_a_random_opponent()
 
     async def game_with_a_friend_opponent(self, game_to_join_id):
-        game = await create_or_join_game_with_friend_opponent(self.player_id, game_to_join_id) #fmt: skip
+        game = await create_or_join_game_with_friend_opponent(self.player.id, game_to_join_id) #fmt: skip
         self.game_id = game.id
         await self.add_players_to_game_group(self.player)
 
@@ -97,7 +97,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             )
 
     async def game_with_a_random_opponent(self):
-        opponent, game = await create_game_with_random_opponent(self.player_id)
+        opponent, game = await create_game_with_random_opponent(self.player.id)
 
         if opponent is None:
             await self.game_wait({"type": EventType.WAIT, "game_id": None})
@@ -110,7 +110,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             )
 
     async def shoot(self, x, y):
-        await shoot_at(x, y, self.game_id, self.player_id)
+        await shoot_at(x, y, self.game_id, self.player.id)
         await self.broadcast_to_group(
             type=EventType.UPDATE, action=EventType.UPDATE, game_id=self.game_id
         )
@@ -123,18 +123,18 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             )
             await self.broadcast_to_group(type=EventType.LEAVE)
 
-        await leave_game(self.player_id, self.game_id)
+        await leave_game(self.player.id, self.game_id)
         self.game_id = None
 
     async def game_update(self, event):
         if event["action"] == EventType.START:
             self.game_id = event["game_id"]
 
-        data = await get_game_data(event["game_id"], self.player_id)
+        data = await get_game_data(event["game_id"], self.player.id)
         await self.send_to_client(action=event["action"], game=data)
 
     async def game_wait(self, event):
-        data = await get_player_data(self.player_id)
+        data = await get_player_data(self.player.id)
         await self.send_to_client(action=event["type"], game_id=self.game_id, you=data)
 
     async def game_leave(self, event):
