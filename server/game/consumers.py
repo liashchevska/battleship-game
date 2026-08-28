@@ -17,6 +17,12 @@ from game.utils import (
 )
 
 
+class OpponentType(StrEnum):
+    RANDOM = "random"
+    FRIEND = "friend"
+    COMPUTER = "computer"
+
+
 class EventType(StrEnum):
     START = "game.start"
     WAIT = "game.wait"
@@ -44,7 +50,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         self.player = await create_player(self.channel_name)
-        
+
         self.game_id = None
         await self.accept()
 
@@ -70,7 +76,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         if action == ActionType.START:
             await self.start(
                 content["ships"],
-                content["friend_as_opponent"],
+                content["opponent_type"],
                 content["game_to_join_id"],
             )
         elif action == ActionType.SHOOT:
@@ -78,14 +84,14 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         elif action == ActionType.LEAVE:
             await self.leave()
 
-    async def start(self, ships, friend_as_opponent, game_to_join_id):
+    async def start(self, ships, opponent_type, game_to_join_id):
         if game_to_join_id is not None and not await can_game_be_joined(
             game_to_join_id
         ):
             await self.send_json({"type": EventType.INVALID})
             return
         await place_ships(self.player, ships)
-        if friend_as_opponent:
+        if opponent_type == OpponentType.FRIEND:
             await self.game_with_a_friend_opponent(game_to_join_id)
         else:
             await self.game_with_a_random_opponent()

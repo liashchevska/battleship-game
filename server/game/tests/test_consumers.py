@@ -31,7 +31,7 @@ def game(communicator):
                 {
                     "action": "start",
                     "ships": [],
-                    "friend_as_opponent": False,
+                    "opponent_type": "random",
                     "game_to_join_id": None,
                 }
             )
@@ -42,7 +42,7 @@ def game(communicator):
                 {
                     "action": "start",
                     "ships": [],
-                    "friend_as_opponent": False,
+                    "opponent_type": "random",
                     "game_to_join_id": None,
                 }
             )
@@ -78,7 +78,7 @@ async def test_join_game_by_invalid_game_id(communicator):
             {
                 "action": "start",
                 "ships": [],
-                "friend_as_opponent": True,
+                "opponent_type": "friend",
                 "game_to_join_id": 999999,
             }
         )
@@ -95,7 +95,7 @@ async def test_players_can_create_and_join_friend_game(communicator):
             {
                 "action": "start",
                 "ships": [],
-                "friend_as_opponent": True,
+                "opponent_type": "friend",
                 "game_to_join_id": None,
             }
         )
@@ -110,7 +110,7 @@ async def test_players_can_create_and_join_friend_game(communicator):
             {
                 "action": "start",
                 "ships": [],
-                "friend_as_opponent": True,
+                "opponent_type": "friend",
                 "game_to_join_id": game_id,
             }
         )
@@ -130,7 +130,7 @@ async def test_players_can_start_random_game(communicator):
             {
                 "action": "start",
                 "ships": [],
-                "friend_as_opponent": False,
+                "opponent_type": "random",
                 "game_to_join_id": None,
             }
         )
@@ -144,41 +144,7 @@ async def test_players_can_start_random_game(communicator):
             {
                 "action": "start",
                 "ships": [],
-                "friend_as_opponent": False,
-                "game_to_join_id": None,
-            }
-        )
-
-        responseA = await playerA.receive_json_from()
-        responseB = await playerB.receive_json_from()
-
-        assert responseA["action"] == "game.start"
-        assert responseB["action"] == "game.start"
-
-
-@pytest.mark.django_db(transaction=True)
-@pytest.mark.asyncio
-async def test_players_can_start_random_game(communicator):
-    async with communicator() as playerA, communicator() as playerB:
-        await playerA.send_json_to(
-            {
-                "action": "start",
-                "ships": [],
-                "friend_as_opponent": False,
-                "game_to_join_id": None,
-            }
-        )
-
-        responseA = await playerA.receive_json_from()
-
-        assert responseA["action"] == "game.wait"
-        assert responseA["game_id"] is None
-
-        await playerB.send_json_to(
-            {
-                "action": "start",
-                "ships": [],
-                "friend_as_opponent": False,
+                "opponent_type": "random",
                 "game_to_join_id": None,
             }
         )
@@ -203,7 +169,7 @@ async def test_join_game_that_is_already_joined(communicator):
             {
                 "action": "start",
                 "ships": [],
-                "friend_as_opponent": True,
+                "opponent_type": "friend",
                 "game_to_join_id": None,
             }
         )
@@ -216,7 +182,7 @@ async def test_join_game_that_is_already_joined(communicator):
             {
                 "action": "start",
                 "ships": [],
-                "friend_as_opponent": True,
+                "opponent_type": "friend",
                 "game_to_join_id": game_id,
             }
         )
@@ -229,7 +195,7 @@ async def test_join_game_that_is_already_joined(communicator):
             {
                 "action": "start",
                 "ships": [],
-                "friend_as_opponent": True,
+                "opponent_type": "friend",
                 "game_to_join_id": game_id,
             }
         )
