@@ -21,6 +21,7 @@ class EventType(StrEnum):
     WAIT = "game.wait"
     UPDATE = "game.update"
     INVALID = "game.invalid"
+    LEAVE = "game.leave"
 
 
 class ActionType(StrEnum):
@@ -102,7 +103,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 self.game_group,
                 self.channel_name,
             )
-            await self.broadcast(type="game.leave")
+            await self.broadcast(type=EventType.LEAVE)
 
         await leave_game(self.player_id, self.game_id)
         self.game_id = None
