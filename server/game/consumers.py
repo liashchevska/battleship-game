@@ -112,20 +112,18 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             self.game_id = event['game_id']
 
         data = await get_game_data(event['game_id'], self.player_id)
-        await self.send_json({'action': event['action'],
-                              'game': data})
+        await self.send_to_client(action=event["action"], game=data)
 
     async def game_wait(self, event):
         data = await get_player_data(self.player_id)
-        await self.send_json({'action': event['type'],
-                              'game_id': self.game_id,
-                              'you': data})
+        await self.send_to_client(action=event["type"], game_id=self.game_id, you=data)
 
     async def game_leave(self, event):
-        await self.send_json({'action': event['type']})
+        await self.send_to_client(action=event['type'])
         await self.leave()
 
     async def broadcast(self, *, type, action=None, **data):
-        await self.channel_layer.group_send(
-            self.game_group, {"type": type, "action": action, **data}
-        )
+        await self.channel_layer.group_send(self.game_group, {"type": type, "action": action, **data})
+
+    async def send_to_client(self, *, action, **data):
+        await self.send_json({"action": action, **data})
