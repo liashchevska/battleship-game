@@ -2,8 +2,8 @@ from enum import StrEnum
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from game.services import (
-    create_game_with_random_opponent,
-    create_or_join_game_with_friend_opponent,
+    create_random_game,
+    create_or_join_friend_game,
 )
 from game.utils import (
     place_ships,
@@ -98,7 +98,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.start_random_game()
 
     async def start_friend_game(self, game_to_join_id):
-        game = await create_or_join_game_with_friend_opponent(self.player.id, game_to_join_id) #fmt: skip
+        game = await create_or_join_friend_game(self.player.id, game_to_join_id) #fmt: skip
         self.game_id = game.id
         await self.add_players_to_game_group(self.player)
 
@@ -110,7 +110,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             )
 
     async def start_random_game(self):
-        opponent, game = await create_game_with_random_opponent(self.player.id)
+        opponent, game = await create_random_game(self.player.id)
 
         if opponent is None:
             await self.game_wait({"type": EventType.WAIT, "game_id": None})
