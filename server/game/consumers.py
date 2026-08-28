@@ -36,6 +36,12 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     def game_group(self):
         return None if self.game_id is None else f"game_no_{self.game_id}"
 
+    async def get_serialized_game(self):
+        return await get_game_data(self.game_id, self.player.id)
+
+    async def get_serialized_player(self):
+        return await get_player_data(self.player.id)
+
     async def connect(self):
         self.player = await create_player(self.channel_name)
         
@@ -130,12 +136,17 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         if event["action"] == EventType.START:
             self.game_id = event["game_id"]
 
-        data = await get_game_data(event["game_id"], self.player.id)
-        await self.send_to_client(action=event["action"], game=data)
+        await self.send_to_client(
+            action=event["action"],
+            game=await self.get_serialized_game()
+        )
 
     async def game_wait(self, event):
-        data = await get_player_data(self.player.id)
-        await self.send_to_client(action=event["type"], game_id=self.game_id, you=data)
+        await self.send_to_client(
+            action=event["type"],
+            game_id=self.game_id,
+            you=await self.get_serialized_player(),
+        )
 
     async def game_leave(self, event):
         await self.send_to_client(action=event["type"])
