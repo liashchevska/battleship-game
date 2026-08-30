@@ -46,7 +46,8 @@ def get_available_opponent(player_id):
 @database_sync_to_async
 def shoot_at(x, y, game_id, player_id):
     game, player = get_game_and_player(game_id, player_id)
-    game.shoot(player, x, y)
+    hit = game.shoot(player, x, y)
+    return hit, game.is_over
 
 
 @database_sync_to_async
