@@ -55,6 +55,29 @@ def game(communicator):
     return create
 
 
+@pytest.fixture
+def computer_game(communicator):
+    @asynccontextmanager
+    async def create():
+        async with communicator() as player:
+            await player.send_json_to(
+                {
+                    "action": "start",
+                    "ships": [],
+                    "opponent_type": "computer",
+                    "game_to_join_id": None,
+                }
+            )
+
+            response = await player.receive_json_from()
+
+            assert response["action"] == "game.start"
+
+            yield player
+
+    return create
+
+
 @pytest.mark.django_db()
 @pytest.mark.asyncio
 async def test_player_lifecycle():
@@ -247,3 +270,32 @@ async def test_disconnect_leaves_game_and_deletes_player(game):
         response = await playerB.receive_json_from()
 
         assert response["action"] == "game.leave"
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.asyncio
+async def test_computer_player_shoots_after_player_misses(computer_game, mocker):
+    mock_shoot = mocker.patch("game.models.Board.shoot", return_value=False)
+
+    async with computer_game() as player:
+        await player.send_json_to(
+            {
+                "action": "shoot",
+                "x": 0,
+                "y": 0,
+            }
+        )
+
+        # Update after player's shot.
+        response = await player.receive_json_from()
+
+        assert response["action"] == "game.update"
+        assert response["game"]["your_turn"] is False
+
+        # Update after computer's shot.
+        response = await player.receive_json_from()
+
+        assert response["action"] == "game.update"
+        assert response["game"]["your_turn"] is True
+
+        assert mock_shoot.call_count == 2

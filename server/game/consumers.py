@@ -1,9 +1,11 @@
 from enum import StrEnum
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
+import asyncio
 
 from game.services import (
     create_random_game,
     create_or_join_friend_game,
+    create_computer_game,
 )
 from game.utils import (
     place_ships,
@@ -15,6 +17,7 @@ from game.utils import (
     delete_player,
     create_player,
 )
+from game.computer import ComputerOpponent
 
 
 class OpponentType(StrEnum):
@@ -42,6 +45,10 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     def game_group(self):
         return None if self.game_id is None else f"game_no_{self.game_id}"
 
+    @property
+    def is_computer_opponent(self):
+        return self.computer is not None
+
     async def get_serialized_game(self):
         return await get_game_data(self.game_id, self.player.id)
 
@@ -50,8 +57,8 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
     async def connect(self):
         self.player = await create_player(self.channel_name)
-
         self.game_id = None
+        self.computer = None
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -91,9 +98,11 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.send_json({"type": EventType.INVALID})
             return
         await place_ships(self.player, ships)
-        
+
         if opponent_type == OpponentType.FRIEND:
             await self.start_friend_game(game_to_join_id)
+        elif opponent_type == OpponentType.COMPUTER:
+            await self.start_computer_game()
         else:
             await self.start_random_game()
 
@@ -106,8 +115,22 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             await self.broadcast_to_group(type=EventType.WAIT, game_id=self.game_id)
         else:
             await self.broadcast_to_group(
-                type=EventType.UPDATE, action=EventType.START, game_id=self.game_id
+                type=EventType.UPDATE,
+                action=EventType.START,
+                game_id=self.game_id
             )
+
+    async def start_computer_game(self):
+        opponent, game = await create_computer_game(self.player.id)
+        self.game_id = game.id
+        self.computer = ComputerOpponent(player_object_id=opponent.id)
+
+        await self.add_players_to_game_group(self.player)
+        await self.broadcast_to_group(
+            type=EventType.UPDATE,
+            action=EventType.START,
+            game_id=self.game_id,
+        )
 
     async def start_random_game(self):
         opponent, game = await create_random_game(self.player.id)
@@ -119,14 +142,43 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             self.game_id = game.id
             await self.add_players_to_game_group(self.player, opponent)
             await self.broadcast_to_group(
-                type=EventType.UPDATE, action=EventType.START, game_id=self.game_id
+                type=EventType.UPDATE,
+                action=EventType.START,
+                game_id=self.game_id
             )
 
     async def shoot(self, x, y):
-        await shoot_at(x, y, self.game_id, self.player.id)
+        hit, _ = await shoot_at(x, y, self.game_id, self.player.id)
+
+        if self.is_computer_opponent:
+            await self.send_to_client(
+                action=EventType.UPDATE,
+                game=await self.get_serialized_game()
+            )
+            if not hit:
+                await self.computer_turn()
+            return
+
         await self.broadcast_to_group(
-            type=EventType.UPDATE, action=EventType.UPDATE, game_id=self.game_id
+            type=EventType.UPDATE,
+            action=EventType.UPDATE,
+            game_id=self.game_id
         )
+
+    async def computer_turn(self):
+        while True:
+            await asyncio.sleep(0.5)
+
+            x, y = self.computer.choose_coordinates()
+            hit, is_over = await shoot_at(x, y, self.game_id, self.computer.player_object_id)
+
+            await self.send_to_client(
+                action=EventType.UPDATE,
+                game=await self.get_serialized_game()
+            )
+
+            if not hit or is_over:
+                break
 
     async def leave(self):
         if self.game_id is not None:
@@ -138,6 +190,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
 
         await leave_game(self.player.id, self.game_id)
         self.game_id = None
+        self.computer = None
 
     async def game_update(self, event):
         if event["action"] == EventType.START:
