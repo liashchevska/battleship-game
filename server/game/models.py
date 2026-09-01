@@ -309,3 +309,11 @@ class Coordinate(models.Model):
     y = models.IntegerField()
     is_hit = models.BooleanField(default=False)
     ship = models.ForeignKey(Ship, on_delete=models.deletion.CASCADE)
+
+    @staticmethod
+    def is_part_of_sunk_ship(board_id, x, y):
+        coordinate = Coordinate.objects.filter(ship__board__id=board_id, x=x, y=y).first()
+        if coordinate is None:
+            return False
+        count_not_hit = Coordinate.objects.filter(ship_id=coordinate.ship_id, is_hit=False).count()
+        return count_not_hit == 0

@@ -207,3 +207,23 @@ def test_player_leave_game(gameAB):
 
     playerB.leave_game(gameAB.id)
     assert Board.objects.filter(player=playerB).count() == 0
+
+
+@pytest.mark.django_db
+def test_is_part_of_sunk_ship_returns_false_when_ship_is_not_sunk(ship1x4_at0x0):
+    board_id = ship1x4_at0x0.board_id
+    assert Coordinate.is_part_of_sunk_ship(board_id, 0, 0) is False
+
+
+@pytest.mark.django_db
+def test_is_part_of_sunk_ship_returns_true_when_all_coordinates_are_hit(ship1x4_at0x0):
+    board_id = ship1x4_at0x0.board_id
+
+    ship1x4_at0x0.coordinate_set.update(is_hit=True)
+    assert Coordinate.is_part_of_sunk_ship(board_id, 0, 0) is True
+
+
+@pytest.mark.django_db
+def test_is_part_of_sunk_ship_returns_false_when_coordinate_is_not_part_of_ship(ship1x4_at0x0):
+    board_id = ship1x4_at0x0.board_id
+    assert Coordinate.is_part_of_sunk_ship(board_id, 1, 1) is False
