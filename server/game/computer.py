@@ -14,7 +14,8 @@ class ComputerOpponent:
 
     @property
     def not_shot(self):
-        return np.argwhere(self.target_board.shots == 0)
+        sunk_ships = self.target_board.shot_ships
+        return np.argwhere(self.target_board.get_shots_with_marked(sunk_ships) == 0)
 
     @property
     def orientation(self) -> None | str:
