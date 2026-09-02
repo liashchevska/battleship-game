@@ -24,9 +24,3 @@ async def create_computer_game(player_id: int) -> tuple[Player, Game]:
     ships = await generate_ships()
     await place_ships(computer, ships)
     return computer, await create_new_game(player_id, computer.id)
-
-
-from game.computer import ComputerOpponent
-async def make_computer_move(player_id: int, game_id: int, computer: ComputerOpponent):
-    pass
-    
