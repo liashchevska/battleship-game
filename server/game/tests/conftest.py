@@ -89,3 +89,9 @@ def playerC(db, player_factory):
 @pytest.fixture
 def playerComputer(player_factory):
     return player_factory(None, False)
+
+@pytest.fixture
+def gameWithComputer(game_factory, player_factory, board_factory):
+    human = board_factory(player_factory("human", is_human=True)).player
+    computer = board_factory(player_factory(None, is_human=False)).player
+    return game_factory(10, 10, human.id, computer.id)

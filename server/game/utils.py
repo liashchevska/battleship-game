@@ -1,8 +1,8 @@
 from game.models import Game, Player, Board
 from channels.db import database_sync_to_async
-from game.serializers import GameSerializer, YouSerializer
 from django.db.models import Q
-
+from game.serializers import GameSerializer, YouSerializer
+from game.computer import ComputerOpponent
 
 def get_game_and_player(game_id, player_id):
     game = Game.objects.get(id=game_id)
@@ -80,3 +80,8 @@ def get_game(game_id):
 @database_sync_to_async
 def generate_ships(rows=10, cols=10):
     return Board.generate_initial_board(rows, cols)
+
+
+@database_sync_to_async
+def computer_shoot(computer: ComputerOpponent) -> tuple[bool, bool]:
+    return computer.shoot(), computer.game.is_over

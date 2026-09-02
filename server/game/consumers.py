@@ -16,6 +16,7 @@ from game.utils import (
     can_game_be_joined,
     delete_player,
     create_player,
+    computer_shoot
 )
 from game.computer import ComputerOpponent
 
@@ -123,7 +124,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     async def start_computer_game(self):
         opponent, game = await create_computer_game(self.player.id)
         self.game_id = game.id
-        self.computer = ComputerOpponent(player_object_id=opponent.id)
+        self.computer = ComputerOpponent(game, opponent)
 
         await self.add_players_to_game_group(self.player)
         await self.broadcast_to_group(
@@ -169,8 +170,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         while True:
             await asyncio.sleep(0.5)
 
-            x, y = self.computer.choose_coordinates()
-            hit, is_over = await shoot_at(x, y, self.game_id, self.computer.player_object_id)
+            hit, is_over = await computer_shoot(self.computer)
 
             await self.send_to_client(
                 action=EventType.UPDATE,
