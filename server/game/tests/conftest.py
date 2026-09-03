@@ -34,6 +34,7 @@ def ship_factory(db, board10x10):
     def create_ship(x, y, rows, cols):
         ship = Ship.objects.create(x=x, y=y, rows=rows, cols=cols, board=board10x10)
         Ship.add_coordinates(ship)
+        board10x10.add_ships_on_board([ship])
         return ship
 
     return create_ship
