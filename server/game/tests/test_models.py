@@ -50,12 +50,6 @@ def test_board_all_ships_are_shot(board10x10):
     ship.coordinate_set.all().update(is_hit=True)
     assert board10x10.all_ships_are_shot
 
-@pytest.mark.django_db
-def test_board_mark_surrounding_cells(board10x10):
-    board10x10.place_ships(ship1x1_at0x0_data)
-    ship = board10x10.ship_set.all()[0]
-    marked = Board._mark_surrounding_cells(board10x10.shots, model_to_dict(ship))
-    assert marked[marked == Board.MISS].size == 3
 
 @pytest.mark.django_db
 def test_board_get_shots_with_marked(board10x10):
@@ -227,3 +221,35 @@ def test_is_part_of_sunk_ship_returns_true_when_all_coordinates_are_hit(ship1x4_
 def test_is_part_of_sunk_ship_returns_false_when_coordinate_is_not_part_of_ship(ship1x4_at0x0):
     board_id = ship1x4_at0x0.board_id
     assert Coordinate.is_part_of_sunk_ship(board_id, 1, 1) is False
+
+
+
+def test_mark_surrounding_cells_marks_diagonals_of_hits():
+    shots = np.array([
+        [2, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 2],
+        [0, 0, 0, 0],
+    ])
+    result = Board._mark_surrounding_cells(shots)
+    expected = np.array([
+        [2, 0, 0, 0],
+        [0, 1, 1, 0],
+        [0, 0, 0, 2],
+        [0, 0, 1, 0],
+    ])
+    np.testing.assert_array_equal(result, expected)
+
+
+@pytest.mark.django_db
+def test_mark_surrounding_cells_marks_adjacent_of_sunk_ships(ship1x4_at0x0):
+    ship1x4_at0x0.coordinate_set.update(is_hit=True)
+    ship1x4_at0x0.board.shots[ship1x4_at0x0.indicies] = Board.HIT
+    
+    result = Board._mark_surrounding_cells(ship1x4_at0x0.board.shots, model_to_dict(ship1x4_at0x0))
+    expected = np.zeros((10, 10), dtype=int)
+    expected[0, 0:4] = Board.HIT
+    expected[0, 4] = Board.MISS
+    expected[1, 0:5] = Board.MISS
+
+    np.testing.assert_array_equal(result, expected)

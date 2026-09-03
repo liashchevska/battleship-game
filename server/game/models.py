@@ -174,9 +174,25 @@ class Board(models.Model):
     @staticmethod
     def _mark_surrounding_cells(array, *data):
         new_array = array.copy()
+        # Mark diagonal cells around every hit
+        hit_indices = np.argwhere(array == Board.HIT)
+
+        for row, col in hit_indices:
+            for dr, dc in [(-1, -1), (-1, 1), (1, -1), (1, 1)]:
+                r = row + dr
+                c = col + dc
+
+                if 0 <= r < array.shape[0] and 0 <= c < array.shape[1]:
+                    new_array[r, c] = Board.MISS
+
+        # Mark adjacent cells of sunk ships
         for ship in data:
             new_array[Ship._get_indicies(ship, offset=True)] = Board.MISS
-            new_array[Ship._get_indicies(ship)] = array[Ship._get_indicies(ship)]
+
+            # Restore original values of ship cells
+            indices = Ship._get_indicies(ship)
+            new_array[indices] = array[indices]
+
         return new_array
 
     def is_already_shot(self, x, y):
