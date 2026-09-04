@@ -92,19 +92,18 @@ body {
 }
 
 .opponent-select>.btn {
-    width: variables.$button-width * 0.5;
+    border-radius: 0;
+    width: variables.$button-width / 3;
 }
 
 .opponent-select .btn:first-of-type {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-right: 0;
+    border-top-left-radius: variables.$button-radius;
+    border-bottom-left-radius: variables.$button-radius;
 }
 
 .opponent-select .btn:last-of-type {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-left: 0;
+    border-top-right-radius: variables.$button-radius;
+    border-bottom-right-radius: variables.$button-radius;
 }
 
 

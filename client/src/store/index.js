@@ -8,7 +8,7 @@ const initialState = {
   gameId: null,
   ships: [],
   shipsPlaced: false,
-  friendAsOpponent: false,
+  opponentType: 'computer',
   gameStarted: false,
   isOver: false,
   youWon: false,
@@ -41,6 +41,9 @@ export default createStore({
   },
 
   getters: {
+    friendAsOpponent: state => {
+      return state.opponentType === "friend"
+    },
     isWaitingForOpponent: state => {
       return !state.gameStarted && state.shipsPlaced
     },
@@ -52,8 +55,8 @@ export default createStore({
     updateShips: (state, ships) => {
       mutate(state, "ships", ships);
     },
-    setOpponent: (state, friend) => {
-      mutate(state, "friendAsOpponent", friend);
+    setOpponent: (state, opponent) => {
+      mutate(state, "opponentType", opponent);
     },
     startGame: state => {
       mutate(state, "gameStarted", true);
@@ -115,21 +118,14 @@ export default createStore({
       dispatch("randomizeShips");
       let gameId = router.currentRoute.value.params.id;
       gameId = gameId == undefined ? null : gameId;
-      let friend = gameId == null ? false : true;
-      commit("setOpponent", friend);
+      let isFriend = gameId == null ? false : true;
+      let opponent = isFriend ? 'friend' : 'computer';
+      commit("setOpponent", opponent);
       commit("setGameId", gameId);
     },
 
-    async createGameWithFriendOpponent({ commit, state }) {
-      if (!state.friendAsOpponent) {
-        commit("setOpponent", true);
-      }
-    },
-
-    createGameWithRandomOpponent({ state, commit }) {
-      if (state.friendAsOpponent) {
-        commit("setOpponent", false);
-      }
+    createGameWith({ commit }, opponent) {
+      commit("setOpponent", opponent)
     },
 
     sendSocketMessage({ state }, payload) {
@@ -148,7 +144,7 @@ export default createStore({
         action: "start",
         ships: state.ships,
         game_to_join_id: state.gameId,
-        opponent_type:  state.friendAsOpponent ? "friend": "random",
+        opponent_type: state.opponentType,
       };
       dispatch("sendSocketMessage", payload);
     },

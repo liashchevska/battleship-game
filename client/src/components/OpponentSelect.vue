@@ -2,14 +2,10 @@
   <div class="opponent-select">
     <p class="text-label">Opponent type</p>
     <template v-if="gameId == null">
-      <button :class="['btn', !friendAsOpponent ? 'btn-primary' : 'btn-secondary']"
-        @click="createGameWithRandomOpponent">
-        random
-      </button>
-      <button :class="['btn', friendAsOpponent ? 'btn-primary' : 'btn-secondary']"
-        @click="createGameWithFriendOpponent">
-        friend
-      </button>
+      <template v-for="opponent in opponents">
+        <button @click="createGameWith(opponent)"
+          :class="['btn', isSelected(opponent) ? 'btn-primary' : 'btn-secondary']">{{ opponent }}</button>
+      </template>
     </template>
     <template v-else>
       <button class="btn btn-primary friend-selected ">friend</button>
@@ -20,13 +16,18 @@
 <script>
 import { mapActions, mapState } from "vuex";
 export default {
+  data() {
+    return {
+      opponents: ['computer', 'random', 'friend'],
+    }
+  },
   computed: {
-    ...mapState(["gameId", "friendAsOpponent"])
+    ...mapState(["gameId", "opponentType"])
   },
   methods: {
+    isSelected(opponent) { return opponent === this.opponentType },
     ...mapActions([
-      "createGameWithFriendOpponent",
-      "createGameWithRandomOpponent"
+      "createGameWith",
     ])
   }
 };

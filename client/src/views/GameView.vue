@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import { zeros, getBoard } from "../helpers";
 import ShipPlacement from "@/components/ShipPlacement.vue";
 import OpponentSelect from "@/components/OpponentSelect.vue";
@@ -68,7 +68,7 @@ export default {
     ...mapState([
       "socket",
       "savedGameId",
-      "friendAsOpponent",
+
       "rows",
       "cols",
       "ships",
@@ -84,6 +84,9 @@ export default {
       "gameStarted",
       "gameId",
       "gameIsInvalid"
+    ]),
+    ...mapGetters([
+      'friendAsOpponent',
     ]),
     link() {
       return document.URL + "join" + this.gameId;
