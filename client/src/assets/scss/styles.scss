@@ -99,11 +99,13 @@ body {
 .opponent-select .btn:first-of-type {
     border-top-left-radius: variables.$button-radius;
     border-bottom-left-radius: variables.$button-radius;
+    border-right: none;
 }
 
 .opponent-select .btn:last-of-type {
     border-top-right-radius: variables.$button-radius;
     border-bottom-right-radius: variables.$button-radius;
+    border-left: none;
 }
 
 
