@@ -140,7 +140,6 @@ export default {
   flex-direction: column;
 
   align-items: center;
-  flex: 1;
   min-height: 0;
 
   margin: var(--gap-md);
