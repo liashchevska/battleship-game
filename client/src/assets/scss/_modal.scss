@@ -1,5 +1,4 @@
 @use "./mixins";
-@use "./variables";
 
 .modal-wrapper {
     position: fixed;
@@ -21,18 +20,18 @@
     @include mixins.themify using ($theme-map) {
         background-color: mixins.theme-based($theme-map, "page-background");
         color: mixins.theme-based($theme-map, "font");
-        border: variables.$button-border solid mixins.theme-based($theme-map, "win");
+        border: var(--button-border) solid mixins.theme-based($theme-map, "win");
     }
 
     box-sizing: border-box;
-    width: variables.$board-size * 1.5;
-    height: variables.$board-size * 0.5;
+    width: calc(var(--board-size) * 1.5);
+    height: calc(var(--board-size) * 0.5);
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: variables.$gap-md;
+    gap: var(--gap-md);
 }
 
 .modal-body {

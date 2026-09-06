@@ -143,34 +143,34 @@ export default {
   flex: 1;
   min-height: 0;
 
-  margin: variables.$gap-md;
+  margin: var(--gap-md);
 }
 
 .game-view {
-  margin-top: variables.$gap-xs;
+  margin-top: var(gap-xs);
   display: flex;
   flex-direction: column;
-  gap: variables.$gap-md;
+  gap: var(--gap-md);
 
   @media (min-width: variables.$boards-breakpoint) {
-    gap: variables.$gap-lg;
+    gap: var(--gap-lg);
   }
 }
 
 .lobby-view {
   display: flex;
   flex-direction: column;
-  gap: variables.$gap-sm;
+  gap: var(--gap-sm);
 }
 
 .boards {
   display: flex;
   flex-direction: column;
-  gap: variables.$gap-md;
+  gap: var(--gap-md);
 
   @media (min-width: variables.$boards-breakpoint) {
     flex-direction: row;
-    gap: variables.$gap-lg;
+    gap: var(--gap-lg);
   }
 }
 
@@ -178,14 +178,14 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: variables.$gap-md;
+  gap: var(--gap-md);
 }
 
 .actions-panel {
   display: flex;
   flex-direction: column;
-  gap: variables.$gap-sm;
-
+  gap: var(--gap-sm);
+  padding-bottom: var(--gap-md);
 }
 
 .join-link {

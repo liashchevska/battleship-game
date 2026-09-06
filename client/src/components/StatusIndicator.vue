@@ -13,14 +13,13 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
-@use '@/assets/scss/variables';
 @use '@/assets/scss/mixins';
 @use 'sass:color';
 
 .status-indicator {
     display: inline-flex;
     align-items: center;
-    gap: variables.$gap-sm;
+    gap: var(--gap-sm);
 }
 
 .dot {

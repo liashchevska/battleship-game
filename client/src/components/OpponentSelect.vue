@@ -34,12 +34,10 @@ export default {
 </script>
 
 <style lang="scss">
-@use '@/assets/scss/variables';
-
 .opponent-select {
   & p {
-    margin-top: variables.$gap-md;
-    margin-bottom: variables.$gap-sm;
+    margin-top: var(--gap-md);
+    margin-bottom: var(--gap-sm);
     text-align: center;
     opacity: 0.8;
   }

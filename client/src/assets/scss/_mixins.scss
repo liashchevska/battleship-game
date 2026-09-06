@@ -1,5 +1,4 @@
 @use "./color-palette" as palette;
-@use "./variables";
 @use "sass:map";
 
 
@@ -17,7 +16,6 @@
 
 @mixin base-button {
     height: 40px;
-    padding: 0 20px;
     color: inherit;
     background: transparent;
     border: 1px solid;

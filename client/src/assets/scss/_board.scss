@@ -1,13 +1,12 @@
-@use "./variables";
 @use "./mixins";
 
 $players: "you", "opponent";
 
 .board-table {
     position: relative;
-    
-    width: variables.$board-size;
-    height: variables.$board-size;
+
+    width: var(--board-size);
+    height: var(--board-size);
     user-select: none;
     border-collapse: collapse;
     padding: 0;
@@ -19,7 +18,7 @@ $players: "you", "opponent";
 
         @include mixins.themify using ($theme-map) {
             &.#{$player} {
-                border: variables.$button-border solid mixins.theme-based($theme-map, $player);
+                border: var(--button-border) solid mixins.theme-based($theme-map, $player);
 
                 &:not(.disabled) {
                     // box-shadow: 0 0 5px mixins.theme-based($theme-map, $player);
@@ -57,13 +56,13 @@ $players: "you", "opponent";
 
 .board-cell {
     @include mixins.themify using ($theme-map) {
-        border: variables.$cell-border solid mixins.theme-based($theme-map, "board-cell-border");
+        border: var(--cell-border) solid mixins.theme-based($theme-map, "board-cell-border");
     }
 
     padding: 0;
-    width: variables.$cell-size;
-    height: variables.$cell-size;
-    border: variables.$cell-border solid transparent;
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border: var(--cell-border) solid transparent;
 }
 
 .shot-hit {
@@ -78,7 +77,7 @@ $players: "you", "opponent";
 
     &:after {
         content: "\d7";
-        font-size: variables.$cell-size + 3px;
+        font-size: calc(var(--cell-size) + 3px);
         line-height: 1;
         transform: translateY(-1px);
 
@@ -92,11 +91,11 @@ $players: "you", "opponent";
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: variables.$gap-sm;
+    gap: var(--gap-sm);
 
     &>.board-table {
         @include mixins.themify using ($theme-map) {
-            border: variables.$button-border solid mixins.theme-based($theme-map, "you");
+            border: var(--button-border) solid mixins.theme-based($theme-map, "you");
         }
     }
 }
@@ -121,8 +120,8 @@ $orientations: "HR", "VR";
             $lw: if(sass($orientation =="HR"): $length; else: 1);
             $lh: if(sass($orientation =="VR"): $length; else: 1);
 
-            width: (variables.$cell-size * $lw) + (variables.$cell-border * ($lw - 1));
-            height: (variables.$cell-size * $lh) + (variables.$cell-border * ($lh - 1));
+            width: calc(var(--cell-size) * #{$lw} + var(--cell-border) * ($lw - 1));
+            height: calc(var(--cell-size) * #{$lh} + var(--cell-border) * ($lh - 1));
 
             border-radius: 2px;
 

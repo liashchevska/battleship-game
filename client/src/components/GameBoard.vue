@@ -82,14 +82,13 @@ export default {
 </script>
 
 <style lang="scss">
-@use '@/assets/scss/variables';
 @use '@/assets/scss/mixins';
 @use 'sass:color';
 
 .board {
   display: flex;
   flex-direction: column;
-  gap: variables.$gap-sm
+  gap: var(--gap-sm)
 }
 
 .opponent.active {

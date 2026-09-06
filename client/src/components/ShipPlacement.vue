@@ -150,23 +150,21 @@ export default {
 </script>
 
 <style lang="scss">
-@use '@/assets/scss/variables';
-
 .placement-tips {
   font-size: 0.85rem;
   line-height: 1.4;
   opacity: 0.8;
 
-  width: variables.$board-size;
+  width: var(--board-size);
 
   & p {
     text-transform: uppercase;
     margin-top: 0;
-    margin-bottom: variables.$gap-xs;
+    margin-bottom: var(--gap-xs);
   }
 
   & ul {
-    margin: variables.$gap-sm;
+    margin: var(--gap-sm);
     margin-left: 0;
     list-style: decimal-leading-zero;
   }

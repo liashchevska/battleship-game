@@ -50,12 +50,10 @@ export default {
 </script>
 
 <style lang="scss">
-@use '@/assets/scss/variables';
-
 .game-status {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: variables.$gap-md;
+  gap: var(--gap-md);
 }
 </style>

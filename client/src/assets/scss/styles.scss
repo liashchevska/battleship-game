@@ -1,4 +1,3 @@
-@use "./variables";
 @use "./mixins";
 @use "./board";
 @use "./modal";
@@ -37,8 +36,8 @@ body {
 
 .btn {
     @extend .text-label;
-    font-size: 12px;
     @include mixins.base-button;
+    font-size: var(--button-font-size) !important;
 }
 
 .btn-primary {
@@ -88,23 +87,23 @@ body {
 }
 
 .friend-selected {
-    width: variables.$button-width !important;
+    width: var(--button-width) !important;
 }
 
 .opponent-select>.btn {
     border-radius: 0;
-    width: variables.$button-width / 3;
+    width: calc(var(--button-width) / 3);
 }
 
 .opponent-select .btn:first-of-type {
-    border-top-left-radius: variables.$button-radius;
-    border-bottom-left-radius: variables.$button-radius;
+    border-top-left-radius: var(--button-radius);
+    border-bottom-left-radius: var(--button-radius);
     border-right: none;
 }
 
 .opponent-select .btn:last-of-type {
-    border-top-right-radius: variables.$button-radius;
-    border-bottom-right-radius: variables.$button-radius;
+    border-top-right-radius: var(--button-radius);
+    border-bottom-right-radius: var(--button-radius);
     border-left: none;
 }
 
@@ -134,14 +133,14 @@ body {
 }
 
 .text-label {
-    font-size: 14px;
+    font-size: var(--text-font-size);
     font-weight: 600;
     letter-spacing: 2px;
     text-transform: uppercase;
 }
 
 .text-state {
-    font-size: 14px;
+    font-size: var(--text-font-size);
     opacity: 0.7;
     letter-spacing: 2px;
     text-transform: uppercase;
