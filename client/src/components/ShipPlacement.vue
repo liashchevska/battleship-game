@@ -1,14 +1,6 @@
 <template>
   <div v-if="board" class="board ship-placement">
-
-    <div class="placement-tips">
-      <p class="">Placement tips:</p>
-      <ul>
-        <li>Drag and drop ships to reposition them on the grid</li>
-        <li>Click a ship cell to rotate the ship clockwise around that cell</li>
-      </ul>
-    </div>
-
+    <p class="placement-tips">Drag to move · Click to rotate</p>
     <table class="board-table">
       <circles-to-rhombuses-spinner v-if="loading" :animation-duration="2500" :rhombus-size="15" :color="'#38bdf8'" />
       <tbody>
@@ -148,25 +140,15 @@ export default {
   },
 };
 </script>
-
 <style lang="scss">
 .placement-tips {
-  font-size: 0.85rem;
+  font-size: var(--tips-font-size);
   line-height: 1.4;
   opacity: 0.8;
 
   width: var(--board-size);
-
-  & p {
-    text-transform: uppercase;
-    margin-top: 0;
-    margin-bottom: var(--gap-xs);
-  }
-
-  & ul {
-    margin: var(--gap-sm);
-    margin-left: 0;
-    list-style: decimal-leading-zero;
-  }
+  margin: 0;
+  text-transform: lowercase;
+  text-align: center;
 }
 </style>
