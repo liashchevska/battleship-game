@@ -141,6 +141,8 @@ export default {
 };
 </script>
 <style lang="scss">
+@use '@/assets/scss/variables';
+
 .placement-tips {
   font-size: var(--tips-font-size);
   line-height: 1.4;
@@ -150,5 +152,9 @@ export default {
   margin: 0;
   text-transform: lowercase;
   text-align: center;
+
+  @media (min-width: variables.$boards-breakpoint) {
+    letter-spacing: 1px;
+  }
 }
 </style>
