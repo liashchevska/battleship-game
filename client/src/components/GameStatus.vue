@@ -4,7 +4,6 @@
       <StatusIndicator :class="currentStatus.code" :displayDot="!isGameActive" :text="currentStatus.text" />
       <ThreeDots v-if="this.waiting" />
     </div>
-    <button class="text-state btn-text" @click="leaveGame">[leave game]</button>
   </h2>
 </template>
 
@@ -20,9 +19,6 @@ export default {
   },
   props: {
     waiting: Boolean
-  },
-  methods: {
-    ...mapActions(['leaveGame']),
   },
   computed: {
     ...mapState([

@@ -21,14 +21,14 @@
       <div class="boards">
         <GameBoard :displayDot="!yourTurn" owner="you" :state="yourTurn ? 'waiting' : 'their turn'" :rows="rows"
           :cols="cols" :ships="ships" :board="getBoard(rows, cols, ships)" :shots="shots" :yours="true"
-          :waiting="false">
-        </GameBoard>
+          :waiting="false" />
 
         <GameBoard :displayDot="yourTurn" owner="opponent" :state="yourTurn ? 'your turn' : 'waiting'" :rows="rows"
           :cols="cols" :ships="opponentShips" :board="getBoard(rows, cols, opponentShips)" :shots="opponent"
           :yours="false" :waiting="!gameStarted && shipsPlaced" />
 
       </div>
+      <button class="text-state btn-text" @click="leaveGame">[leave game]</button>
     </div>
   </div>
 </template>
@@ -142,7 +142,7 @@ export default {
   align-items: center;
   min-height: 0;
 
-  margin: var(--gap-md);
+  margin: var(--gap-sm);
 }
 
 .game-view {
@@ -165,7 +165,7 @@ export default {
 .boards {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  // gap: var(--gap-xs);
 
   @media (min-width: variables.$boards-breakpoint) {
     flex-direction: row;
