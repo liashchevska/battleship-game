@@ -14,7 +14,7 @@ A full-stack real-time Battleship game where players can play against a random o
 **Infrastructure:** Docker Compose, Nginx, Certbot  
 
 ## Upgrade
-This project was originally developed a few years ago using Vue 2 and Django 3. As part of this upgrade, it was migrated to Vue 3 and Django 5, with dependencies updated across the stack. The UI was refreshed to provide a more modern look and feel, and the application was containerized with Docker Compose, with Nginx serving as a reverse proxy for deployment.
+This project was originally developed a few years ago using Vue 2 and Django 3. As part of this upgrade, it was migrated to Vue 3 and Django 5, with dependencies updated across the stack. The UI was refreshed to provide a more modern look and feel, and the application was containerized with Docker Compose, with Nginx serving as a reverse proxy for deployment. Also, a single-player mode was added with computer as an opponent.
 
 ### Before
 <p align="left">
@@ -42,6 +42,3 @@ docker compose -f dev.docker-compose.yaml up
 ```
 
 The frontend runs with Vite's development server and supports hot module replacement (HMR) during development.
-
-## Roadmap
-- Add a single-player mode with an AI opponent.
