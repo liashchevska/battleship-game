@@ -141,15 +141,13 @@ export default {
 
   align-items: center;
   min-height: 0;
-
-  margin: var(--gap-sm);
 }
 
 .game-view {
-  margin-top: var(gap-xs);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--gap-xs);
+  padding-bottom: var(--gap-md);
 
   @media (min-width: variables.$boards-breakpoint) {
     gap: var(--gap-lg);
@@ -165,7 +163,6 @@ export default {
 .boards {
   display: flex;
   flex-direction: column;
-  // gap: var(--gap-xs);
 
   @media (min-width: variables.$boards-breakpoint) {
     flex-direction: row;
