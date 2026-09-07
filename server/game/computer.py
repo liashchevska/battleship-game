@@ -83,7 +83,6 @@ class ComputerOpponent:
         self.game.refresh_from_db()
         x, y = self.get_next_coordinates()
         hit = self.game.shoot(self.player, x, y)
-        print('HITS:', self.hits)
         if hit:
             self.hits.append((x, y))
             sunk = Coordinate.is_part_of_sunk_ship(self.target_board.id, x, y)            
