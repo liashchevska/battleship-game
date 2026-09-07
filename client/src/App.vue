@@ -15,10 +15,10 @@ export default {
 
 <style lang="scss">
 .app-title {
+  font-family: 'Cutive Mono', monospace;
   text-align: center;
   font-size: 1.5rem;
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 0.15em;
   line-height: 1;
   transform: scaleY(0.9);

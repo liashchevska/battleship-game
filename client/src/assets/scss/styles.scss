@@ -2,9 +2,8 @@
 @use "./board";
 @use "./modal";
 
-@import url("https://fonts.googleapis.com/css2?family=Special+Elite&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&family=Red+Hat+Mono:ital,wght@0,300..700;1,300..700&display=swap');
-html,
+@import url('https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Red+Hat+Mono:ital,wght@0,300..700;1,300..700&display=swap');
+
 body {
     height: 100%;
     margin: 0;
@@ -30,7 +29,8 @@ body {
         color: mixins.theme-based($theme-map, "font");
     }
 
-    font-family: "Red Hat Mono", monospace;
+    font-family: "Red Hat Mono",
+    monospace;
 }
 
 
