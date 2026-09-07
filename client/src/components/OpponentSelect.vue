@@ -1,6 +1,6 @@
 <template>
   <div class="opponent-select">
-    <p class="text-label">Opponent type</p>
+    <p class="text-label opponent-label">opponent type</p>
     <template v-if="gameId == null">
       <template v-for="opponent in opponents">
         <button @click="createGameWith(opponent)"
@@ -41,5 +41,8 @@ export default {
     text-align: center;
     opacity: 0.8;
   }
+}
+.opponent-label {
+  text-transform: lowercase !important;
 }
 </style>
