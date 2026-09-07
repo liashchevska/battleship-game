@@ -19,7 +19,7 @@ const initialState = {
   opponent: [],
   opponentShips: [],
   gameIsInvalid: false,
-  loading: false
+  loading: false,
 };
 
 const mutate = (state, prop, value) => {
@@ -29,11 +29,9 @@ const mutate = (state, prop, value) => {
 export default createStore({
   state: {
     ...initialState,
-
-    socket: new WebSocket(
-      `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/`
-    ),
-
+    connectionLost: false,
+    
+    socket: null,
     handler: null,
 
     rows: 10,
@@ -52,6 +50,9 @@ export default createStore({
     }
   },
   mutations: {
+    setConnectionLost: (state, isLost) => {
+      mutate(state, "connectionLost", isLost)
+    },
     updateShips: (state, ships) => {
       mutate(state, "ships", ships);
     },
@@ -94,14 +95,17 @@ export default createStore({
     updateGameWinner: (state, youWon) => {
       mutate(state, "youWon", youWon);
     },
-    updateSocket: (state, url) => {
-      mutate(state, "socket", new WebSocket(url));
+    updateSocket: (state, socket) => {
+      mutate(state, "socket", socket);
     },
     closeSocket: state => {
       state.socket.close();
     },
     reset: state => {
       Object.assign(state, initialState);
+      state.socket = null;
+      state.handler = null;
+      state.connectionLost = false;
     },
     addListeners: (state, handler) => {
       state.handler = handler;
@@ -109,19 +113,46 @@ export default createStore({
     },
     setLoading(state, loading) {
       state.loading = loading;
-    }
+    },
   },
 
   actions: {
-    initSocket({ commit, dispatch }, payload) {
-      commit("addListeners", payload.handler);
-      dispatch("randomizeShips");
-      let gameId = router.currentRoute.value.params.id;
-      gameId = gameId == undefined ? null : gameId;
-      let isFriend = gameId == null ? false : true;
-      let opponent = isFriend ? 'friend' : 'computer';
-      commit("setOpponent", opponent);
-      commit("setGameId", gameId);
+    initSocket({ state, commit }, { handler, onOpen }) {
+      const socket = new WebSocket(
+        `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/`
+      );
+      socket.intentionalClose = false;
+
+      socket.onmessage = handler;
+      socket.onopen = () => {
+        onOpen(socket);
+      };
+
+      socket.onclose = () => {
+        console.log('Connection closed.')
+        if (!socket.intentionalClose) {
+          console.log("Connection lost.");
+          commit("setConnectionLost", true);
+        }
+      };
+
+      commit("updateSocket", socket);
+    },
+
+
+    startGame({ state, dispatch }, handler) {
+      let payload = {
+        action: "start",
+        ships: state.ships,
+        game_to_join_id: state.gameId,
+        opponent_type: state.opponentType,
+      };
+
+      dispatch('initSocket', {
+        handler, onOpen: socket => {
+          socket.send(JSON.stringify(payload));
+        }
+      });
     },
 
     createGameWith({ commit }, opponent) {
@@ -139,15 +170,11 @@ export default createStore({
       commit("setLoading", false);
     },
 
-    startGame({ state, dispatch }) {
-      let payload = {
-        action: "start",
-        ships: state.ships,
-        game_to_join_id: state.gameId,
-        opponent_type: state.opponentType,
-      };
-      dispatch("sendSocketMessage", payload);
+    initGame({ commit }, { gameId, opponent }) {
+      commit("setGameId", gameId);
+      commit("setOpponent", opponent);
     },
+
 
     updateGame({ commit }, data) {
       commit("updateBoard", data.you.board);
@@ -191,7 +218,7 @@ export default createStore({
       dispatch("sendSocketMessage", payload);
     },
 
-    resetGame({ commit, dispatch }) {
+    resetGame({ state, commit, dispatch }) {
       commit("reset");
       dispatch("randomizeShips");
       if (router.currentRoute.value.path != "/") {
@@ -199,12 +226,21 @@ export default createStore({
       }
     },
 
-    leaveGame({ dispatch }) {
-      let payload = {
+    leaveGame({ state, dispatch }) {
+      if (!state.socket) {
+        return;
+      }
+
+      state.socket.intentionalClose = true;
+
+      state.socket.send(JSON.stringify({
         action: "leave"
-      };
-      dispatch("sendSocketMessage", payload);
+      }));
+
+      state.socket.close();
+
       dispatch("resetGame");
     }
+
   }
 });

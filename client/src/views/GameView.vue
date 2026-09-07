@@ -6,7 +6,7 @@
       <ShipPlacement :rows="rows" :cols="cols" />
       <div class="actions-panel">
         <OpponentSelect />
-        <button class="btn btn-primary" @click="startGame">start game</button>
+        <button class="btn btn-primary" @click="onStartGameClick">start game</button>
       </div>
     </div>
 
@@ -42,6 +42,7 @@ import GameStatus from "@/components/GameStatus.vue";
 import GameBoard from "@/components/GameBoard.vue";
 import GameIsInvalidModal from "@/components/GameIsInvalidModal.vue";
 import { useClipboard } from '@vueuse/core'
+import router from "@/router";
 
 export default {
   components: {
@@ -94,9 +95,13 @@ export default {
   },
   created() {
     this.dummyBoard = zeros(this.rows, this.cols, 0);
-    this.$store.dispatch("initSocket", {
-      handler: this.onGameUpdate
-    });
+
+    this.randomizeShips();
+    let gameId = router.currentRoute.value.params.id;
+    gameId = gameId == undefined ? null : gameId;
+    let isFriend = gameId == null ? false : true;
+    let opponent = isFriend ? 'friend' : 'computer';
+    this.initGame({ gameId, opponent });
     window.addEventListener("beforeunload", this.beforeWindowUnload);
   },
 
@@ -107,8 +112,13 @@ export default {
       "updateGame",
       "startGame",
       "leaveGame",
-      "resetGame"
+      "resetGame",
+      "randomizeShips",
+      "initGame",
     ]),
+    onStartGameClick() {
+      this.startGame(this.onGameUpdate);
+    },
     beforeWindowUnload(event) {
       if (this.gameStarted && !this.opponentLeft) {
         event.preventDefault();
