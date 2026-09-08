@@ -51,4 +51,6 @@
         background-color: transparent;
         color: white;
     }
+
+    width: calc(var(--board-size)/3);
 }
