@@ -1,6 +1,6 @@
 <template>
   <div class="game-container">
-    <GameIsInvalidModal v-if="gameIsInvalid" />
+    <InfoModal v-if="gameIsInvalid">Sorry, this game is unavailable.</InfoModal>
 
     <div class="lobby-view" v-if="!shipsPlaced">
       <ShipPlacement :rows="rows" :cols="cols" />
@@ -40,7 +40,7 @@ import ShipPlacement from "@/components/ShipPlacement.vue";
 import OpponentSelect from "@/components/OpponentSelect.vue";
 import GameStatus from "@/components/GameStatus.vue";
 import GameBoard from "@/components/GameBoard.vue";
-import GameIsInvalidModal from "@/components/GameIsInvalidModal.vue";
+import InfoModal from "@/components/InfoModal.vue";
 import { useClipboard } from '@vueuse/core'
 import router from "@/router";
 
@@ -50,7 +50,7 @@ export default {
     GameStatus,
     GameBoard,
     OpponentSelect,
-    GameIsInvalidModal
+    InfoModal
   },
 
   setup() {
