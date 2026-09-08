@@ -1,6 +1,7 @@
 <template>
   <div class="game-container">
     <InfoModal v-if="gameIsInvalid">Sorry, this game is unavailable.</InfoModal>
+    <InfoModal v-if="connectionLost">Sorry, connection to the server was lost.</InfoModal>
 
     <div class="lobby-view" v-if="!shipsPlaced">
       <ShipPlacement :rows="rows" :cols="cols" />
@@ -84,7 +85,9 @@ export default {
       "shipsPlaced",
       "gameStarted",
       "gameId",
-      "gameIsInvalid"
+      "gameIsInvalid",
+
+      "connectionLost"
     ]),
     ...mapGetters([
       'friendAsOpponent',
