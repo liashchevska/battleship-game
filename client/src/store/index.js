@@ -20,6 +20,7 @@ const initialState = {
   opponentShips: [],
   gameIsInvalid: false,
   loading: false,
+  isServerDown: false
 };
 
 const mutate = (state, prop, value) => {
@@ -30,7 +31,7 @@ export default createStore({
   state: {
     ...initialState,
     connectionLost: false,
-    
+
     socket: null,
     handler: null,
 
@@ -114,6 +115,9 @@ export default createStore({
     setLoading(state, loading) {
       state.loading = loading;
     },
+    setServerIsDown(state, isDown) {
+      state.isServerDown = isDown;
+    }
   },
 
   actions: {
@@ -165,7 +169,11 @@ export default createStore({
 
     async randomizeShips({ state, commit }) {
       commit("setLoading", true);
-      const response = await axios.get(`/random-board/?rows=${state.rows}&cols=${state.cols}`);
+      const response = await axios.get(`/random-board/?rows=${state.rows}&cols=${state.cols}`).catch(error => {
+        if (error.response.status === 500) {
+          commit("setServerIsDown", true)
+        }
+      });
       commit("updateShips", response.data);
       commit("setLoading", false);
     },

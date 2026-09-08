@@ -2,6 +2,7 @@
   <div class="game-container">
     <InfoModal v-if="gameIsInvalid">Sorry, this game is unavailable.</InfoModal>
     <InfoModal v-if="connectionLost">Sorry, connection to the server was lost.</InfoModal>
+    <InfoModal v-if="isServerDown">Sorry, server is down, come back later.</InfoModal>
 
     <div class="lobby-view" v-if="!shipsPlaced">
       <ShipPlacement :rows="rows" :cols="cols" />
@@ -85,9 +86,10 @@ export default {
       "shipsPlaced",
       "gameStarted",
       "gameId",
-      "gameIsInvalid",
 
-      "connectionLost"
+      "gameIsInvalid",
+      "connectionLost",
+      "isServerDown",
     ]),
     ...mapGetters([
       'friendAsOpponent',
@@ -98,7 +100,6 @@ export default {
   },
   created() {
     this.dummyBoard = zeros(this.rows, this.cols, 0);
-
     this.randomizeShips();
     let gameId = router.currentRoute.value.params.id;
     gameId = gameId == undefined ? null : gameId;
