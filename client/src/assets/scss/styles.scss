@@ -144,4 +144,8 @@ body {
     opacity: 0.7;
     letter-spacing: 2px;
     text-transform: uppercase;
+    
+}
+.text-label, .text-state, .app-title, .placement-tips {
+    user-select: none;
 }
